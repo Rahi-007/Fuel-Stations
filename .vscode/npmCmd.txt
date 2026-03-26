@@ -1,0 +1,7 @@
+Npm CMD:
+
+fresh install : npm ci
+Install node modules : npm install
+Remove folder : rmdir /s /q folderName
+Update packages : npx npm-check-updates -u
+Uninstall Package : npm Uninstall package Name
