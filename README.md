@@ -1,85 +1,65 @@
-# Next.js Starter Template
+# FuelMap.bd
 
-A production-ready Next.js starter template with TypeScript, Tailwind CSS, and shadcn/ui.
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.0.0-green)](https://github.com/yourusername/fuelmap)
+[![Frontend](https://img.shields.io/badge/Frontend-Next.js-orange)](https://nextjs.org/)
+[![Backend](https://img.shields.io/badge/Backend-NestJS-blueviolet)](https://nestjs.com/)
 
-## Author
+## Overview
+FuelMap.bd is a web application that helps users in Bangladesh locate nearby fuel stations, check real-time fuel availability, and plan their refueling trips efficiently. The platform supports both petrol and diesel stations and provides location-based search for convenience.
 
-Bisakto Rahi
+---
 
 ## Features
+- 🌐 Find nearby petrol and diesel stations in Bangladesh  
+- ⛽ Check real-time fuel availability  
+- 📍 Map-based station locations  
+- 🔎 Search fuel stations by city or district  
+- 📝 Optional: User login/signup for personalized experience  
 
-- Next.js 15+ with App Router
-- TypeScript
-- Tailwind CSS v4
-- shadcn/ui components
-- Dark mode support
-- Motion animations
-- Pre-configured fonts
-- ESLint and Prettier
-- Responsive design
+---
 
-## Getting Started
+## Technology Stack
+- **Frontend:** Next.js, TypeScript, TailwindCSS  
+- **Backend:** NestJS, PostgreSQL, MicroORM  
+- **Authentication:** JWT-based login/signup  
+- **Mapping:** Google Maps API (or OpenStreetMap)  
+- **Deployment:** Vercel / Heroku  
 
-1. Clone or copy this template
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+---
 
-## Project Structure
+## Installation & Setup
 
-```
-.
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   ├── error.tsx
-│   │   ├── loading.tsx
-│   │   ├── not-found.tsx
-│   │   └── motion/
-│   ├── components/
-│   │   ├── feature/
-│   │   │   └── sample-feature.tsx
-│   │   └── ui/
-│   │       ├── button.tsx
-│   │       └── theme-toggle.tsx
-│   ├── config/
-│   │   ├── configURL.ts
-│   │   └── const.ts
-│   ├── context/
-│   │   └── store.ts
-│   ├── data/
-│   ├── hooks/
-│   ├── interface/
-│   │   └── book.ts
-│   ├── lib/
-│   │   └── utils.ts
-│   ├── middleware/
-│   ├── provider/
-│   │   ├── storeProvider.tsx
-│   │   └── themeProvider.tsx
-│   ├── services/
-│   │   └── book.service.ts
-│   ├── style/
-│   │   └── globals.css
-├── public/
-├── package.json
-├── tailwind.config.ts
-├── tsconfig.json
-└── next.config.ts
+1. Clone the repository
+
+```bash
+git clone https://github.com/Rahi-007/Fuel-Stations.git
 ```
 
-## Available Scripts
+2. Install frontend dependencies
+```bash
+cd frontend
+npm install
+```
 
-- `npm run dev` - Runs the app in development mode
-- `npm run build` - Builds the app for production
-- `npm run start` - Runs the built app in production mode
-- `npm run lint` - Runs ESLint
+3. Install backend dependencies
+```bash
+cd backend
+npm install
+```
 
-Start building your next application without worrying about basic setup!
+4. Configure environment variables
+```bash
+# Copy the .env.example file to .env and update values if needed
+```
+
+5. Run the project
+```bash
+# Backend
+cd backend
+npm run start:dev
+
+# Frontend
+cd frontend
+npm run dev
+```

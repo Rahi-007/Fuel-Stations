@@ -9,24 +9,25 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background">
       <div className="max-w-4xl w-full space-y-8">
+        {/* Hero Section */}
         <motion.div className="text-center" {...fadeUpAnimation(20, 0.5, 0)}>
           <motion.h1
             className="text-4xl font-bold tracking-tight"
             {...fadeUpAnimation(20, 0.5, 0.1)}
           >
-            Next.js Starter Template
+            FuelMap.bd
           </motion.h1>
           <motion.p
             className="mt-4 text-lg text-muted-foreground"
             {...fadeUpAnimation(20, 0.5, 0.2)}
           >
-            A production-ready template with TypeScript, Tailwind CSS, and
-            shadcn/ui
+            Locate nearby fuel stations in Bangladesh, check fuel availability, and plan your refueling trips efficiently.
           </motion.p>
         </motion.div>
 
+        {/* Quick Links Section */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8"
           {...fadeUpAnimation(30, 0.5, 0.3)}
@@ -39,7 +40,7 @@ export default function Home() {
               className="text-2xl font-semibold"
               {...fadeUpAnimation(15, 0.4, 0.5)}
             >
-              Getting Started <ThemeToggle />
+              Resources <ThemeToggle />
             </motion.h2>
             <motion.div
               className="flex flex-col sm:flex-row gap-4"
@@ -65,8 +66,7 @@ export default function Home() {
                 </code>
               </p>
               <p className="text-sm mt-2">
-                Author:
-                <i className="px-2 py-1 text-xs">Bisakto Rahi</i>
+                Author: <i className="px-2 py-1 text-xs">Bisakto Rahi</i>
               </p>
             </motion.div>
           </motion.div>
@@ -76,6 +76,7 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
+        {/* Features Section */}
         <motion.div
           className="mt-12 pt-8 border-t border-border"
           {...fadeUpAnimation(30, 0.6, 0.5)}
@@ -84,24 +85,24 @@ export default function Home() {
             className="text-xl font-semibold mb-4"
             {...fadeUpAnimation(15, 0.4, 0.6)}
           >
-            Features Included
+            Features
           </motion.h2>
           <motion.ul
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-left text-sm"
             {...fadeUpAnimation(0, 0.4, 0.7)}
           >
             {[
-              "Next.js 15+",
-              "TypeScript",
-              "Tailwind CSS v4",
-              "shadcn/ui Components",
-              "Dark Mode",
-              "Motion Animation",
-              "Responsive Design",
-              "Path Aliases",
-              "Pre-configured Fonts",
-              "ESLint & Prettier",
-              "Custom Screen Sizes",
+              "Locate petrol and diesel stations",
+              "Real-time fuel availability",
+              "Search by city or district",
+              "Map-based station locations",
+              "Filter stations by fuel type",
+              "Dark mode support",
+              "Responsive design for mobile & desktop",
+              "User login/signup (future)",
+              "Pre-configured fonts & UI",
+              "Motion animations for smooth UI",
+              "ESLint & Prettier configured",
             ].map((feature, index) => (
               <motion.li
                 key={feature}
