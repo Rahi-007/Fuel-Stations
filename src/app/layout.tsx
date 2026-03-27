@@ -23,7 +23,8 @@ const notoBengali = Noto_Sans_Bengali({
 
 export const metadata: Metadata = {
   title: "Fuel Map",
-  description: "Find petrol and diesel stations across Bangladesh with FuelMap.bd. Check fuel availability, station locations, and save time on your refueling trips.",
+  description:
+    "Find petrol and diesel stations across Bangladesh with FuelMap.bd. Check fuel availability, station locations, and save time on your refueling trips.",
 };
 
 interface IProps {
@@ -33,7 +34,9 @@ interface IProps {
 export default function RootLayout({ children }: Readonly<IProps>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${salsa.variable} ${roboto.variable} ${notoBengali.variable} antialiased`}>
+      <body
+        className={`${salsa.variable} ${roboto.variable} ${notoBengali.variable} antialiased`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
