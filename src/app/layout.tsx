@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/provider/themeProvider";
 import { Salsa, Roboto_Condensed, Noto_Sans_Bengali } from "next/font/google";
+import { ThemeProvider } from "@/provider/themeProvider";
+import Providers from "@/provider/storeProvider";
+import Root from "./Root";
 import "../style/globals.css";
 
 const salsa = Salsa({
@@ -43,7 +45,9 @@ export default function RootLayout({ children }: Readonly<IProps>) {
           enableSystem={false}
           disableTransitionOnChange
         >
-          {children}
+          <Providers>
+            <Root>{children}</Root>
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

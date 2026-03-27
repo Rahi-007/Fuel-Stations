@@ -153,6 +153,10 @@ p {
   font-family: var(--font-2) !important;
   font-weight: 400;
 }
+.font-salsa {
+  font-family: var(--font-1) !important;
+  font-weight: 400;
+}
 /*W <Comment>----------={  Scrollbar style  }=----------</Comment> */
 html {
   scroll-behavior: smooth;

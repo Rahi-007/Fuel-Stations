@@ -1,19 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useAppSelector } from "@/hooks/reduxHooks";
+import UserDropdown from "./UserDropdown";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const user = useAppSelector((state) => state.auth.user);
 
   return (
     <header className="w-full border-b bg-background sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
-        <Link href="/" className="text-xl font-bold">
-          FuelMap.bd
+        <Link href="/">
+          <div className="flex items-center gap-2">
+            <div className="h-9 w-9 rounded-xl border bg-card" />{" "}
+            {/* for logo */}
+            <span className="text-xl font-bold tracking-tight font-salsa">
+              FuelMap.bd
+            </span>
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
@@ -31,19 +39,25 @@ export default function Header() {
           </Link>
         </nav>
 
-        <div className="hidden md:flex items-center gap-3">
-          <ThemeToggle />
-          <Button size="sm">Login</Button>
-          <Button variant={"outline"} size="sm">
-            Sign Up
-          </Button>
+        <div className="flex items-center gap-3">
+          {user ? (
+            <UserDropdown user={user} />
+          ) : (
+            <div className="hidden md:flex items-center gap-2">
+              <Button variant="outline" asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/login">Sign Up</Link>
+              </Button>
+            </div>
+          )}
         </div>
 
         <button
           className="md:hidden flex items-center gap-3"
           onClick={() => setOpen(!open)}
         >
-          <ThemeToggle />
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>

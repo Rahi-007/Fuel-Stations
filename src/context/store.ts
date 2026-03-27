@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { counterSlice } from "./slice/counter.slice";
+import { authSlice } from "./slice/auth.slice";
 import { logger } from "./middleware/logger";
 
 export const store = configureStore({
   reducer: {
-    counter: counterSlice.reducer,
+    auth: authSlice.reducer,
   },
   devTools: process.env.NODE_ENV === "development",
   middleware: (getDefaultMiddleware) =>
