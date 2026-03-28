@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login } from "@/service/auth.service";
+import { login, setAxiosAuthToken } from "@/service/auth.service";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { setAuth } from "@/context/slice/auth.slice";
 import LoginForm from "./LoginForm";
@@ -37,6 +37,7 @@ const page = () => {
                 localStorage.setItem("accessToken", res.accessToken);
                 localStorage.setItem("refreshToken", res.refreshToken);
                 localStorage.setItem("user", JSON.stringify(res.user));
+                setAxiosAuthToken(res.accessToken);
                 dispatch(setAuth(res));
                 router.replace("/");
               } catch (e: any) {

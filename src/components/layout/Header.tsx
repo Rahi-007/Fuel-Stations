@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,10 @@ import UserDropdown from "./UserDropdown";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
+
+  useEffect(() => setMounted(true), []);
 
   return (
     <header className="w-full border-b bg-background sticky top-0 z-50">
@@ -40,7 +43,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          {user ? (
+          {mounted && user ? (
             <UserDropdown user={user} />
           ) : (
             <div className="hidden md:flex items-center gap-2">

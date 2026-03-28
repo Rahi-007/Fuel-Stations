@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/reduxHooks";
-import { useThemeToggle } from "@/components/ui/theme-toggle";
+import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { clearAuth } from "@/context/slice/auth.slice";
 import { logout } from "@/service/auth.service";
@@ -23,7 +23,12 @@ interface IProps {
 const UserDropdown = ({ user }: IProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { theme, toggleTheme } = useThemeToggle();
+  const { setTheme, resolvedTheme } = useTheme();
+
+  const toggleTheme = () => {
+    const current = resolvedTheme ?? "dark";
+    setTheme(current === "dark" ? "light" : "dark");
+  };
 
   const fullName = useMemo(() => {
     if (!user) return "";
@@ -59,25 +64,24 @@ const UserDropdown = ({ user }: IProps) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="w-48">
-          <Link href="/profile">
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-          </Link>
+          <DropdownMenuItem asChild>
+            <Link href="/profile">Profile</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={toggleTheme}
             className="flex items-center justify-between"
           >
             Theme
-            {theme === "dark" ? (
-              <Moon className="h-4 w-4" />
-            ) : (
-              <Sun className="h-4 w-4" />
-            )}
+            <span className="relative inline-flex h-4 w-4 shrink-0">
+              <Sun className="h-4 w-4 dark:hidden" />
+              <Moon className="absolute inset-0 h-4 w-4 hidden dark:block" />
+            </span>
           </DropdownMenuItem>
-          <Link href="/pass" onClick={(e) => e.preventDefault()}>
-            <DropdownMenuItem className="opacity-50 cursor-not-allowed">
+          <DropdownMenuItem asChild className="opacity-50 cursor-not-allowed">
+            <Link href="/pass" onClick={(e) => e.preventDefault()}>
               Forgot Password
-            </DropdownMenuItem>
-          </Link>
+            </Link>
+          </DropdownMenuItem>
 
           <DropdownMenuSeparator />
 

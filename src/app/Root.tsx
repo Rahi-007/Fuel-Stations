@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { setAuth } from "@/context/slice/auth.slice";
 import { IUser } from "@/interface/user.interface";
-import axios from "axios";
+import { setAxiosAuthToken } from "@/service/auth.service";
+import { AuthRouteGuard } from "@/components/auth/AuthRouteGuard";
 
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
@@ -18,10 +19,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
     const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
     const userString = localStorage.getItem(USER_KEY);
 
-    // axios header set
-    if (accessToken) {
-      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-    }
+    setAxiosAuthToken(accessToken);
 
     // only if all exist → set auth
     if (accessToken && refreshToken && userString) {
@@ -34,5 +32,10 @@ export default function Root({ children }: { children: React.ReactNode }) {
     }
   }, [dispatch]);
 
-  return children;
+  return (
+    <>
+      <AuthRouteGuard />
+      {children}
+    </>
+  );
 }

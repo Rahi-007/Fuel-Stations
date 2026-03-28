@@ -35,7 +35,7 @@ interface IProps {
 
 export default function RootLayout({ children }: Readonly<IProps>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
         className={`${salsa.variable} ${roboto.variable} ${notoBengali.variable} antialiased`}
       >
