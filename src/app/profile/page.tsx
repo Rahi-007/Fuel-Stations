@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useAppSelector } from "@/hooks/reduxHooks";
 import { getUserById } from "@/service/user.service";
 import useAsyncAction from "@/hooks/useAsyncAction";
+import Header from "@/components/layout/Header";
+import ProfilePage from "@/components/layout/ProfilePage";
 
 const page = () => {
   const userId = useAppSelector((state) => state.auth.user?.id);
@@ -16,10 +18,17 @@ const page = () => {
 
   return (
     <>
-      <div className="font-salsa text-center text-3xl pt-4">User profile</div>
-      <p className="text-center text-gray-500">
-        Check to the console for the all data
-      </p>
+      {fnLoadUser.data?.email ? (
+        <>
+          {/* Navbar */}
+          <Header />
+          <ProfilePage user={fnLoadUser.data} />
+        </>
+      ) : (
+        <>
+          <h1 className="text-center mt-10">Loading...</h1>{" "}
+        </>
+      )}
     </>
   );
 };
