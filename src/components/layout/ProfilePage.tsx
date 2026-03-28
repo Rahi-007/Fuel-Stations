@@ -4,28 +4,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-interface IUser {
-  id: number;
-  firstName: string;
-  lastName?: string;
-  phone?: string;
-  email: string;
-  address?: string;
-  avatar?: string;
-  dob?: Date;
-  lastLoggedIn?: Date;
-  gender?: string;
-  bloodGroup?: string;
-  isVerified: boolean;
-  isBlocked: boolean;
-  role: string;
-  trustScore?: number;
-  totalReports?: number;
-  correctReports?: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { IUser } from "@/interface/user.interface";
 
 export default function ProfilePage({ user }: { user: IUser }) {
   const fullName = `${user.firstName} ${user.lastName ?? ""}`;

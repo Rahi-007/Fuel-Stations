@@ -14,8 +14,6 @@ const page = () => {
     fnLoadUser.action(userId);
   }, [userId]);
 
-  console.log(fnLoadUser.data);
-
   return (
     <>
       {fnLoadUser.data?.email ? (
