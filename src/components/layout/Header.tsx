@@ -28,13 +28,13 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="#" className="text-sm hover:text-primary">
+          <Link href="/" className="text-sm hover:text-primary">
             Home
           </Link>
-          <Link href="#" className="text-sm hover:text-primary">
+          <Link href="/stations" className="text-sm hover:text-primary">
             Stations
           </Link>
-          <Link href="#" className="text-sm hover:text-primary">
+          <Link href="/map" className="text-sm hover:text-primary">
             Map
           </Link>
           <Link href="#" className="text-sm hover:text-primary">
@@ -69,21 +69,21 @@ export default function Header() {
       {open && (
         <div className="md:hidden border-t px-4 pb-4 space-y-3">
           <Link
-            href="#"
+            href="/"
             className="block text-sm py-2"
             onClick={() => setOpen(false)}
           >
             Home
           </Link>
           <Link
-            href="#"
+            href="/stations"
             className="block text-sm py-2"
             onClick={() => setOpen(false)}
           >
             Stations
           </Link>
           <Link
-            href="#"
+            href="/map"
             className="block text-sm py-2"
             onClick={() => setOpen(false)}
           >

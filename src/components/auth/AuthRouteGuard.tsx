@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector } from "@/hooks/reduxHooks";
 
 /** Paths that do not require a session (home + auth screens). */
-const PUBLIC_PATHS = new Set(["/", "/login", "/register"]);
+const PUBLIC_PATHS = new Set(["/", "/login", "/register", "/stations", "/map"]);
 
 function hasStoredAccessToken() {
   try {

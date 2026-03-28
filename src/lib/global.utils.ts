@@ -5,3 +5,7 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function urlWithState(path: string) {
+  return `${path}?state=${Date.now()}`;
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Salsa, Roboto_Condensed, Noto_Sans_Bengali } from "next/font/google";
 import { ThemeProvider } from "@/provider/themeProvider";
+import { Toaster } from "sonner";
 import Providers from "@/provider/storeProvider";
 import Root from "./Root";
 import "../style/globals.css";
@@ -46,7 +47,10 @@ export default function RootLayout({ children }: Readonly<IProps>) {
           disableTransitionOnChange
         >
           <Providers>
-            <Root>{children}</Root>
+            <Root>
+              {children}
+              <Toaster />
+            </Root>
           </Providers>
         </ThemeProvider>
       </body>

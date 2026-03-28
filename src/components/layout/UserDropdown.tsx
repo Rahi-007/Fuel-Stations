@@ -15,6 +15,7 @@ import {
 import { IUser } from "@/interface/user.interface";
 import { Moon, Sun } from "lucide-react";
 import Link from "next/link";
+import { ADMIN_ROLE } from "@/components/auth/AdminGuard";
 
 interface IProps {
   user: IUser;
@@ -67,6 +68,11 @@ const UserDropdown = ({ user }: IProps) => {
           <DropdownMenuItem asChild>
             <Link href="/profile">Profile</Link>
           </DropdownMenuItem>
+          {user.role === ADMIN_ROLE ? (
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard">Dashboard</Link>
+            </DropdownMenuItem>
+          ) : null}
           <DropdownMenuItem
             onClick={toggleTheme}
             className="flex items-center justify-between"
