@@ -13,6 +13,7 @@ const page = () => {
     if (!userId) return;
     fnLoadUser.action(userId);
   }, [userId]);
+  // console.log({fnLoadUser})
 
   return (
     <>
