@@ -6,10 +6,10 @@ import { MapPin, Navigation } from "lucide-react";
 import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { axiosMessage } from "@/lib/axios-error";
-import type { OsmFuelStation } from "@/interface/station.interface";
+import type { IStation } from "@/interface/station.interface";
 import { fetchNearbyStations } from "@/service/stations.service";
 
-const StationMap = dynamic(() => import("@/components/map/StationMap"), {
+const StationMap = dynamic(() => import("@/components/feature/StationMap"), {
   ssr: false,
   loading: () => (
     <div className="h-[min(70vh,560px)] w-full animate-pulse rounded-xl border border-border bg-muted" />
@@ -20,7 +20,7 @@ const DHAKA = { lat: 23.8103, lng: 90.4125 };
 
 export default function MapPage() {
   const [center, setCenter] = useState(DHAKA);
-  const [stations, setStations] = useState<OsmFuelStation[]>([]);
+  const [stations, setStations] = useState<IStation[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +30,7 @@ export default function MapPage() {
     setError(null);
     setMessage(null);
     try {
-      const res = await fetchNearbyStations(lat, lng, 5000);
+      const res = await fetchNearbyStations(lat, lng, 10000);
       setStations(res.stations);
       setCenter({ lat, lng });
       setMessage(

@@ -94,7 +94,11 @@ export default function ProfilePage({ user }: { user: IUser }) {
           />
           <Info
             label="Joined"
-            value={new Date(user.createdAt).toLocaleDateString()}
+            value={
+              user.createdAt
+                ? new Date(user.createdAt).toLocaleDateString()
+                : undefined
+            }
           />
         </CardContent>
       </Card>

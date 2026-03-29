@@ -1,14 +1,16 @@
-import axios from "axios";
-import { api } from "@/config/configURL";
+import axios, { AxiosResponse } from "axios";
+import { api, API_URLS } from "@/config/configURL";
 import type {
-  ListStationsResponse,
   NearbyStationsResponse,
+  IStation,
+  UpdateStation,
 } from "@/interface/station.interface";
+import { Pagination, SearchParams } from "@/interface/base.interface";
 
 export async function fetchNearbyStations(
   lat: number,
   lng: number,
-  radius = 5000
+  radius = 10000
 ): Promise<NearbyStationsResponse> {
   const qs = new URLSearchParams({
     lat: String(lat),
@@ -21,23 +23,54 @@ export async function fetchNearbyStations(
   return data;
 }
 
-export async function fetchStationsFromDb(filters: {
-  division?: string;
-  district?: string;
-  subDistrict?: string;
-  village?: string;
-  limit?: number;
-}): Promise<ListStationsResponse> {
-  const params = new URLSearchParams();
-  if (filters.division?.trim()) params.set("division", filters.division.trim());
-  if (filters.district?.trim()) params.set("district", filters.district.trim());
-  if (filters.subDistrict?.trim())
-    params.set("subDistrict", filters.subDistrict.trim());
-  if (filters.village?.trim()) params.set("village", filters.village.trim());
-  if (filters.limit != null) params.set("limit", String(filters.limit));
-  const q = params.toString();
-  const { data } = await axios.get<ListStationsResponse>(
-    `${api("stations")}${q ? `?${q}` : ""}`
-  );
-  return data;
+export interface IStationRes extends Pagination<IStation> {}
+export function loadStations(
+  searchOptions?: Partial<SearchParams> & {
+    division?: string;
+    district?: string;
+    subDistrict?: string;
+    village?: string;
+  }
+): Promise<IStationRes> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get<any, AxiosResponse<IStationRes>>(
+        API_URLS.stations.all(),
+        {
+          params: searchOptions,
+        }
+      );
+
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function getStationById(id: number) {
+  return new Promise<IStation>(async (resolve, reject) => {
+    try {
+      const response = await axios.get<any, AxiosResponse<IStation>>(
+        API_URLS.stations.get(id)
+      );
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function editStation(id: number, data: Partial<UpdateStation>) {
+  return new Promise<IStation>(async (resolve, reject) => {
+    try {
+      const response = await axios.put<any, AxiosResponse<IStation>>(
+        API_URLS.stations.update(id),
+        data
+      );
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
 }

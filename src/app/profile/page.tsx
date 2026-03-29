@@ -4,7 +4,7 @@ import { useAppSelector } from "@/hooks/reduxHooks";
 import { getUserById } from "@/service/user.service";
 import useAsyncAction from "@/hooks/useAsyncAction";
 import Header from "@/components/layout/Header";
-import ProfilePage from "@/components/layout/ProfilePage";
+import ProfilePage from "@/app/profile/ProfilePage";
 
 const page = () => {
   const userId = useAppSelector((state) => state.auth.user?.id);

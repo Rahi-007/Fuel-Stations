@@ -1,5 +1,4 @@
-export interface OsmFuelStation {
-  /** Internal DB id after backend upsert */
+export interface IStation {
   id: number;
   osmId: number;
   osmType: "node" | "way" | "relation";
@@ -8,23 +7,44 @@ export interface OsmFuelStation {
   lat: number;
   lng: number;
   tags: Record<string, string>;
-  /** From OSM addr:* tags when present / linked admin row name */
-  division: string | null;
-  district: string | null;
-  /** Sub-district (e.g. upazila) */
-  subDistrict: string | null;
+  division: {
+    id: number;
+    name: string;
+  };
+  district: {
+    id: number;
+    name: string;
+  };
+  subDistrict: {
+    id: number;
+    name: string;
+  };
   village: string | null;
+}
+
+export enum OsmType {
+  Node = "node",
+  Way = "way",
+  Relation = "relation",
+}
+
+export interface UpdateStation {
+  osmType?: OsmType;
+  name?: string;
+  brand?: string;
+  lat?: number;
+  lng?: number;
+  tags?: number; // Record<string, string>;
+  divisionId?: number;
+  districtId?: number;
+  subDistrictId?: number;
+  village?: string;
 }
 
 export interface NearbyStationsResponse {
   source: string;
   attribution: string;
   count: number;
-  stations: OsmFuelStation[];
+  stations: IStation[];
   persisted?: boolean;
-}
-
-export interface ListStationsResponse {
-  count: number;
-  stations: OsmFuelStation[];
 }

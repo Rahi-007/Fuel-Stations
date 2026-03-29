@@ -14,8 +14,11 @@ export const API_URLS = {
     register: () => api("auth/register"),
   },
   stations: {
+    all: () => api("stations"),
+    get: (id: number) => api(`stations/${id}`),
     nearby: (lat: number, lng: number, radius = 5000) =>
       api(`stations/nearby?${objectToUrlParams({ lat, lng, radius })}`),
+    update: (id: number) => api(`stations/${id}`),
   },
   user: {
     all: (s?: Record<string, any>) =>

@@ -8,7 +8,7 @@ import {
   TileLayer,
   useMap,
 } from "react-leaflet";
-import type { OsmFuelStation } from "@/interface/station.interface";
+import type { IStation } from "@/interface/station.interface";
 import "leaflet/dist/leaflet.css";
 
 function MapRecenter({ lat, lng }: { lat: number; lng: number }) {
@@ -22,7 +22,7 @@ function MapRecenter({ lat, lng }: { lat: number; lng: number }) {
 interface StationMapProps {
   centerLat: number;
   centerLng: number;
-  stations: OsmFuelStation[];
+  stations: IStation[];
 }
 
 export default function StationMap({
@@ -54,7 +54,7 @@ export default function StationMap({
           }}
         >
           <Popup>
-            <div className="min-w-[160px]">
+            <div className="min-w-40">
               <div className="text-sm font-medium">
                 {s.name ?? s.brand ?? "Fuel station"}
               </div>
@@ -63,10 +63,10 @@ export default function StationMap({
               ) : null}
               {(s.district || s.subDistrict || s.village || s.division) && (
                 <div className="mt-1 space-y-0.5 text-[10px] text-neutral-500">
-                  {s.division ? <div>Division: {s.division}</div> : null}
-                  {s.district ? <div>District: {s.district}</div> : null}
+                  {s.division ? <div>Division: {s.division.id}</div> : null}
+                  {s.district ? <div>District: {s.district.id}</div> : null}
                   {s.subDistrict ? (
-                    <div>Sub-district: {s.subDistrict}</div>
+                    <div>Sub-district: {s.subDistrict.id}</div>
                   ) : null}
                   {s.village ? <div>Area: {s.village}</div> : null}
                 </div>
