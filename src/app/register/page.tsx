@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 const Signup = () => {
+  const [showPass, setShowPass] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -78,14 +81,22 @@ const Signup = () => {
               className="w-full p-3 rounded-lg bg-white/10 text-white border border-white/10 outline-none"
             />
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg bg-white/10 text-white border border-white/10 outline-none"
-            />
+            <div className="relative">
+              <input
+                type={showPass ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-white/10 text-white border border-white/10 outline-none"
+              />
+              <p
+                className="absolute top-3 right-3 cursor-pointer"
+                onClick={() => setShowPass(!showPass)}
+              >
+                {showPass ? <Eye /> : <EyeOff />}
+              </p>
+            </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Creating..." : "Create Account"}
@@ -95,7 +106,9 @@ const Signup = () => {
           {/* Footer */}
           <p className="text-center text-xs text-slate-500">
             Already have an account?{" "}
-            <span className="text-blue-400 cursor-pointer">Login</span>
+            <span className="text-blue-400 cursor-pointer">
+              <Link href={"./login"}>Login</Link>
+            </span>
           </p>
         </div>
       </div>

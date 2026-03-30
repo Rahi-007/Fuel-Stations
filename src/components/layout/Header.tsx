@@ -98,9 +98,11 @@ export default function Header() {
           </Link>
 
           <div className="flex items-center gap-3 pt-3">
-            <Button size="sm">Login</Button>
-            <Button variant={"outline"} size="sm">
-              Sign Up
+            <Button variant="outline" asChild>
+              <Link href="/login">Login</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/login">Sign Up</Link>
             </Button>
           </div>
         </div>

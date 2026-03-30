@@ -42,7 +42,7 @@ const SignupForm = () => {
     console.log(formData);
 
     setTimeout(() => {
-      toast.success("Account Created");
+      toast.success("Update Success");
       setLoading(false);
     }, 1000);
   };
@@ -149,15 +149,15 @@ const SignupForm = () => {
 
             {/* Button */}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating..." : "Create Account"}
+              {loading ? "Updating..." : "Update Profile"}
             </Button>
           </form>
 
           {/* Footer */}
-          <p className="text-center text-sm text-slate-500">
+          {/* <p className="text-center text-sm text-slate-500">
             Already have an account?{" "}
             <span className="text-blue-400 cursor-pointer">Login</span>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

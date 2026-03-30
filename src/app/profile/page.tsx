@@ -5,6 +5,8 @@ import { getUserById } from "@/service/user.service";
 import useAsyncAction from "@/hooks/useAsyncAction";
 import Header from "@/components/layout/Header";
 import ProfilePage from "@/app/profile/ProfilePage";
+import Loading from "../loading";
+import Footer from "@/components/layout/Footer";
 
 const page = () => {
   const userId = useAppSelector((state) => state.auth.user?.id);
@@ -22,10 +24,11 @@ const page = () => {
           {/* Navbar */}
           <Header />
           <ProfilePage user={fnLoadUser.data} />
+          <Footer />
         </>
       ) : (
         <>
-          <h1 className="text-center mt-10">Loading...</h1>{" "}
+          <Loading />
         </>
       )}
     </>

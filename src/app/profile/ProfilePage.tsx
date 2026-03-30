@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { IUser } from "@/interface/user.interface";
+import Link from "next/link";
 
 export default function ProfilePage({ user }: { user: IUser }) {
   const fullName = `${user.firstName} ${user.lastName ?? ""}`;
@@ -41,7 +42,9 @@ export default function ProfilePage({ user }: { user: IUser }) {
             </div>
           </div>
 
-          <Button>Edit Profile</Button>
+          <Button>
+            <Link href="./profile/update">Edit Profile</Link>
+          </Button>
         </CardContent>
       </Card>
 

@@ -19,6 +19,9 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { setAuth } from "@/context/slice/auth.slice";
 import { toast } from "sonner";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -39,6 +42,7 @@ const LoginForm = () => {
       password: "",
     },
   });
+  const [showPass, setShowPass] = useState(false);
 
   const onSubmit = async (values: LoginFormValues) => {
     try {
@@ -107,14 +111,20 @@ const LoginForm = () => {
                   </button>
                 </div>
 
-                <div className="transition-all duration-300 group-focus-within:scale-[1.01]">
+                <div className="transition-all duration-300 group-focus-within:scale-[1.01] relative">
                   <GInput.Form
-                    type="password"
+                    type={showPass ? "text" : "password"}
                     name="password"
                     label=""
                     control={form.control}
                     placeholder="password"
                   />
+                  <p
+                    className="absolute top-1.5 right-2 cursor-pointer"
+                    onClick={() => setShowPass(!showPass)}
+                  >
+                    {showPass ? <Eye /> : <EyeOff />}
+                  </p>
                 </div>
               </div>
 
@@ -178,9 +188,11 @@ const LoginForm = () => {
           {/* Footer */}
           <p className="text-center text-sm text-slate-500">
             Don't have an account?{" "}
-            <span className="text-blue-400 font-bold hover:text-blue-300 hover:underline cursor-pointer">
-              Sign up
-            </span>
+            <Link href={"./register"}>
+              <span className="text-blue-400 font-bold hover:text-blue-300 hover:underline cursor-pointer">
+                Sign up
+              </span>
+            </Link>
           </p>
         </div>
       </div>

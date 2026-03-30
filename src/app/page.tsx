@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { fadeRightAnimation, fadeUpAnimation } from "@/lib/motion.utils";
 import Header from "@/components/layout/Header";
 import Link from "next/link";
+import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   return (
@@ -131,6 +132,7 @@ export default function Home() {
           </motion.ul>
         </motion.div>
       </div>
+      <Footer />
     </div>
   );
 }
