@@ -3,8 +3,11 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import { MapPin, Navigation } from "lucide-react";
+import { useForm } from "react-hook-form";
 import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import GAmount from "@/components/common/GAmount";
 import { axiosMessage } from "@/lib/axios-error";
 import type { IStation } from "@/interface/station.interface";
 import { fetchNearbyStations } from "@/service/stations.service";
@@ -16,25 +19,43 @@ const StationMap = dynamic(() => import("@/components/feature/StationMap"), {
   ),
 });
 
-const DHAKA = { lat: 23.8103, lng: 90.4125 };
+const RAJSHAHI = { lat: 24.3745, lng: 88.6042 };
 
 export default function MapPage() {
-  const [center, setCenter] = useState(DHAKA);
+  const [center, setCenter] = useState(RAJSHAHI);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [stations, setStations] = useState<IStation[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [radius, setRadius] = useState<number>(10); // Default 10km
+
+  const form = useForm<{ radius: number }>({
+    defaultValues: {
+      radius: 10,
+    },
+  });
+
+  // Watch form value changes
+  const watchedRadius = form.watch('radius');
+
+  useEffect(() => {
+    if (watchedRadius && watchedRadius >= 1 && watchedRadius <= 100) {
+      setRadius(watchedRadius);
+    }
+  }, [watchedRadius]);
 
   const loadNearby = useCallback(async (lat: number, lng: number) => {
     setLoading(true);
     setError(null);
     setMessage(null);
     try {
-      const res = await fetchNearbyStations(lat, lng, 10000);
+      const radiusInMeters = radius * 1000; // Convert km to meters
+      const res = await fetchNearbyStations(lat, lng, radiusInMeters);
       setStations(res.stations);
       setCenter({ lat, lng });
       setMessage(
-        `${res.count} fuel station${res.count === 1 ? "" : "s"} — OpenStreetMap data${
+        `${res.count} fuel station${res.count === 1 ? "" : "s"} found within ${radius}km — OpenStreetMap data${
           res.persisted ? ", saved to database" : ""
         }`
       );
@@ -49,8 +70,12 @@ export default function MapPage() {
     }
   }, []);
 
+  const handleSubmit = () => {
+    void loadNearby(center.lat, center.lng);
+  };
+
   useEffect(() => {
-    void loadNearby(DHAKA.lat, DHAKA.lng);
+    void loadNearby(RAJSHAHI.lat, RAJSHAHI.lng);
   }, [loadNearby]);
 
   const onUseLocation = () => {
@@ -61,6 +86,8 @@ export default function MapPage() {
     setError(null);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        const location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setUserLocation(location);
         void loadNearby(pos.coords.latitude, pos.coords.longitude);
       },
       () => {
@@ -87,7 +114,31 @@ export default function MapPage() {
               your backend.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-end gap-2">
+            <div className="flex flex-col gap-1">
+              <Form {...form}>
+                <form onSubmit={(e) => e.preventDefault()}>
+                  <GAmount.Form
+                    control={form.control}
+                    name="radius"
+                    label="Search radius (km)"
+                    min={1}
+                    max={100}
+                    disabled={loading}
+                  />
+                </form>
+              </Form>
+            </div>
+            <Button
+              type="button"
+              variant="default"
+              size="sm"
+              disabled={loading}
+              onClick={handleSubmit}
+            >
+              <MapPin className="mr-1.5 h-4 w-4" />
+              Search
+            </Button>
             <Button
               type="button"
               variant="outline"
@@ -122,6 +173,7 @@ export default function MapPage() {
             centerLat={center.lat}
             centerLng={center.lng}
             stations={stations}
+            userLocation={userLocation || undefined}
           />
         </div>
 

@@ -51,8 +51,8 @@ const StationForm = (props: IProps) => {
       lng: props.defaultValues?.lng || 0,
       //   tags: props.defaultValues?.tags || 0,
       divisionId: props.defaultValues?.division?.id || 0,
-      districtId: props.defaultValues?.district.id || 0,
-      subDistrictId: props.defaultValues?.subDistrict.id || 0,
+      // districtId: props.defaultValues?.district.id || undefined,
+      // subDistrictId: props.defaultValues?.subDistrict.id || 0,
       village: props.defaultValues?.village || "",
     },
   });
@@ -112,7 +112,7 @@ const StationForm = (props: IProps) => {
         .action(props.defaultValues.id, values)
         .then(() => {
           toast.success("Station updated successfully");
-          router.push(urlWithState(`/Station`));
+          router.push(`/stations`);
         })
         .catch((error) => {
           toast.error(error);

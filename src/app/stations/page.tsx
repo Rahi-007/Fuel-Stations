@@ -1,10 +1,18 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 import {
   Table,
@@ -26,7 +34,7 @@ import { loadDivisions } from "@/service/division.service";
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 
-const DB_LIMIT = 500;
+const PAGE_LIMIT = 30;
 
 type FilterForm = {
   divisionId?: number;
@@ -40,6 +48,9 @@ export default function StationsPage() {
   const fnLoadDivisions = useAsyncAction(loadDivisions);
   const fnLoadDistricts = useAsyncAction(loadDistricts);
   const fnLoadSubDistricts = useAsyncAction(loadSubDistricts);
+
+  // pagination state
+  const [currentPage, setCurrentPage] = useState(1);
 
   // form
   const form = useForm<FilterForm>({
@@ -100,17 +111,30 @@ export default function StationsPage() {
       division: values.divisionId?.toString(),
       district: values.districtId?.toString(),
       subDistrict: values.subDistrictId?.toString(),
-      limit: DB_LIMIT,
+      limit: PAGE_LIMIT,
+      page: currentPage,
     });
   };
 
   // initial load
   useEffect(() => {
-    fnLoadStations.action({ limit: DB_LIMIT }); // all
+    fnLoadStations.action({ limit: PAGE_LIMIT, page: 1 });
     fnLoadDivisions.action();
     fnLoadDistricts.action();
     fnLoadSubDistricts.action();
   }, []);
+
+  // Reload data when page changes
+  useEffect(() => {
+    const values = form.getValues();
+    fnLoadStations.action({
+      division: values.divisionId?.toString(),
+      district: values.districtId?.toString(),
+      subDistrict: values.subDistrictId?.toString(),
+      limit: PAGE_LIMIT,
+      page: currentPage,
+    });
+  }, [currentPage]);
 
   const loading = fnLoadStations.onLoading;
 
@@ -174,6 +198,7 @@ export default function StationsPage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Id</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Brand</TableHead>
                 <TableHead>Division</TableHead>
@@ -189,13 +214,14 @@ export default function StationsPage() {
             <TableBody>
               {loading && (
                 <TableRow>
-                  <TableCell colSpan={8}>Loading...</TableCell>
+                  <TableCell colSpan={10}>Loading...</TableCell>
                 </TableRow>
               )}
 
               {!loading &&
                 fnLoadStations.data?.data?.map((s) => (
                   <TableRow key={s.id}>
+                    <TableCell>{s.id ?? "—"}</TableCell>
                     <TableCell>{s.name ?? "—"}</TableCell>
                     <TableCell>{s.brand ?? "—"}</TableCell>
 
@@ -215,7 +241,7 @@ export default function StationsPage() {
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
                         <Button variant="ghost" size="icon" asChild>
-                          <Link href={`/dashboard/location/division/${s.id}`}>
+                          <Link href={`/stations/${s.id}`}>
                             <Pencil className="h-4 w-4" />
                           </Link>
                         </Button>
@@ -237,13 +263,40 @@ export default function StationsPage() {
               {/* ✅ Empty State */}
               {!loading && fnLoadStations.data?.data?.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center">
+                  <TableCell colSpan={10} className="text-center">
                     No data
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Pagination */}
+        <div className="mt-4 flex justify-center">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                />
+              </PaginationItem>
+              
+              <PaginationItem>
+                <PaginationLink className="cursor-pointer">
+                  {currentPage}
+                </PaginationLink>
+              </PaginationItem>
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => setCurrentPage((prev) => prev + 1)}
+                  className={(!fnLoadStations.data?.data || fnLoadStations.data.data.length < PAGE_LIMIT) ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
     </div>
