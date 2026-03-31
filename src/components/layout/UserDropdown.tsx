@@ -16,6 +16,7 @@ import { IUser } from "@/interface/user.interface";
 import { Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { ADMIN_ROLE } from "@/components/auth/AdminGuard";
+import { toast } from "sonner";
 
 interface IProps {
   user: IUser;
@@ -97,6 +98,7 @@ const UserDropdown = ({ user }: IProps) => {
               logout();
               dispatch(clearAuth());
               router.replace("/");
+              toast.success("You are logged out");
             }}
           >
             Logout

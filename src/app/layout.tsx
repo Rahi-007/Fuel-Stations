@@ -54,7 +54,19 @@ export default function RootLayout({ children }: Readonly<IProps>) {
           <Providers>
             <Root>
               {children}
-              <Toaster />
+              <Toaster
+                theme="dark"
+                closeButton
+                toastOptions={{
+                  className:
+                    "border border-zinc-700/60 bg-zinc-950/92 text-zinc-100 backdrop-blur-md",
+                  descriptionClassName: "text-zinc-400",
+                  style: {
+                    boxShadow:
+                      "0 14px 34px -16px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,255,255,0.06)",
+                  },
+                }}
+              />
             </Root>
           </Providers>
         </ThemeProvider>

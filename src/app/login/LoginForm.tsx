@@ -23,7 +23,7 @@ import {
 
 /** Glass inputs — blur + low tint, no heavy fill */
 const inputDark =
-  "h-11 rounded-xl border border-white/[0.12] bg-white/[0.04] px-3.5 text-slate-100 shadow-none placeholder:text-slate-400/80 backdrop-blur-md transition-[border-color,background-color,box-shadow] focus-visible:border-white/25 focus-visible:bg-white/[0.07] focus-visible:shadow-[0_0_0_3px_rgba(255,255,255,0.06)] focus-visible:ring-0";
+  "h-11 rounded-xl border border-zinc-300/70 bg-white/80 px-3.5 text-zinc-900 shadow-none placeholder:text-zinc-500/90 backdrop-blur-md transition-[border-color,background-color,box-shadow] focus-visible:border-cyan-500/40 focus-visible:bg-white focus-visible:shadow-[0_0_0_3px_rgba(14,116,144,0.10)] focus-visible:ring-0 dark:border-white/[0.12] dark:bg-white/[0.04] dark:text-slate-100 dark:placeholder:text-slate-400/80 dark:focus-visible:border-white/25 dark:focus-visible:bg-white/[0.07] dark:focus-visible:shadow-[0_0_0_3px_rgba(255,255,255,0.06)]";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -69,21 +69,21 @@ const LoginForm = () => {
       animate="visible"
       custom={{ delay: 0.05, y: 24 }}
     >
-      <div className="relative overflow-hidden rounded-3xl border border-white/[0.14] bg-black/25 p-8 shadow-[0_24px_64px_-12px_rgba(0,0,0,0.55)] backdrop-blur-2xl backdrop-saturate-150 supports-[backdrop-filter]:bg-black/15">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent opacity-50" />
+      <div className="relative overflow-hidden rounded-3xl border border-zinc-200/80 bg-white/70 p-8 shadow-[0_24px_64px_-20px_rgba(15,23,42,0.3)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/[0.14] dark:bg-black/25 dark:shadow-[0_24px_64px_-12px_rgba(0,0,0,0.55)] supports-[backdrop-filter]:bg-white/65 dark:supports-[backdrop-filter]:bg-black/15">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-zinc-400/35 to-transparent dark:via-white/25" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/35 to-transparent opacity-60 dark:from-white/[0.04] dark:opacity-50" />
 
         <motion.div
           className="relative space-y-3 text-center"
           {...fadeUpAnimation(14, 0.4, 0.02)}
         >
-          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-sm">
-            <Fuel className="h-5 w-5 text-slate-200" />
+          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl border border-zinc-300/70 bg-white/80 backdrop-blur-sm dark:border-white/15 dark:bg-white/[0.06]">
+            <Fuel className="h-5 w-5 text-zinc-700 dark:text-slate-200" />
           </div>
-          <h2 className="bg-gradient-to-br from-white via-slate-100 to-slate-400 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
+          <h2 className="bg-gradient-to-br from-zinc-900 via-zinc-700 to-zinc-500 bg-clip-text text-2xl font-bold tracking-tight text-transparent dark:from-white dark:via-slate-100 dark:to-slate-400">
             Sign in
           </h2>
-          <p className="text-sm text-slate-300/80">
+          <p className="text-sm text-zinc-600 dark:text-slate-300/80">
             Welcome back — continue to your dashboard.
           </p>
         </motion.div>
@@ -94,8 +94,8 @@ const LoginForm = () => {
             className="relative mt-8 space-y-5"
           >
             <motion.div {...fadeUpAnimation(12, 0.35, 0.06)} className="space-y-2">
-              <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-400/90">
-                <span className="h-1 w-1 rounded-full bg-white/40" aria-hidden />
+              <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-slate-400/90">
+                <span className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40" aria-hidden />
                 Email
               </label>
               <GInput.Form
@@ -110,13 +110,13 @@ const LoginForm = () => {
 
             <motion.div {...fadeUpAnimation(12, 0.35, 0.1)} className="space-y-2">
               <div className="flex items-center justify-between gap-2">
-                <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-400/90">
-                  <span className="h-1 w-1 rounded-full bg-white/40" aria-hidden />
+                <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-slate-400/90">
+                  <span className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40" aria-hidden />
                   Password
                 </label>
                 <button
                   type="button"
-                  className="text-xs font-medium text-slate-300/90 underline-offset-2 transition-colors hover:text-white"
+                  className="text-xs font-medium text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 dark:text-slate-300/90 dark:hover:text-white"
                 >
                   Forgot password?
                 </button>
@@ -133,7 +133,7 @@ const LoginForm = () => {
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-200/70 hover:text-zinc-900 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
                   aria-label={showPass ? "Hide password" : "Show password"}
                 >
                   {showPass ? (
@@ -173,11 +173,11 @@ const LoginForm = () => {
           className="relative mt-8 flex items-center gap-3"
           {...fadeUpAnimation(8, 0.3, 0.18)}
         >
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-white/10" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400/80">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-zinc-400/40 to-zinc-300/20 dark:via-white/20 dark:to-white/10" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-zinc-500 dark:text-slate-400/80">
             or
           </span>
-          <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/20 to-white/10" />
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent via-zinc-400/40 to-zinc-300/20 dark:via-white/20 dark:to-white/10" />
         </motion.div>
 
         <motion.div
@@ -186,7 +186,7 @@ const LoginForm = () => {
         >
           <button
             type="button"
-            className="flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.05] py-2.5 text-sm font-medium text-slate-100 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/[0.1]"
+            className="flex items-center justify-center gap-2 rounded-xl border border-zinc-300/70 bg-white/70 py-2.5 text-sm font-medium text-zinc-800 backdrop-blur-sm transition-all hover:border-zinc-400/80 hover:bg-white dark:border-white/[0.12] dark:bg-white/[0.05] dark:text-slate-100 dark:hover:border-white/20 dark:hover:bg-white/[0.1]"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -198,7 +198,7 @@ const LoginForm = () => {
           </button>
           <button
             type="button"
-            className="flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.05] py-2.5 text-sm font-medium text-slate-100 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/[0.1]"
+            className="flex items-center justify-center gap-2 rounded-xl border border-zinc-300/70 bg-white/70 py-2.5 text-sm font-medium text-zinc-800 backdrop-blur-sm transition-all hover:border-zinc-400/80 hover:bg-white dark:border-white/[0.12] dark:bg-white/[0.05] dark:text-slate-100 dark:hover:border-white/20 dark:hover:bg-white/[0.1]"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -211,13 +211,13 @@ const LoginForm = () => {
         </motion.div>
 
         <motion.p
-          className="relative mt-8 text-center text-sm text-slate-400/90"
+          className="relative mt-8 text-center text-sm text-zinc-600 dark:text-slate-400/90"
           {...fadeRightAnimation(8, 0.35, 0.26)}
         >
           No account?{" "}
           <Link
             href="/register"
-            className="font-semibold text-white/95 underline-offset-2 transition-colors hover:text-white hover:underline"
+            className="font-semibold text-zinc-900 underline-offset-2 transition-colors hover:text-zinc-700 hover:underline dark:text-white/95 dark:hover:text-white"
           >
             Create one
           </Link>

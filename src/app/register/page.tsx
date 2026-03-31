@@ -1,119 +1,88 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import Image from "next/image";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { motion } from "motion/react";
+import FuelMapLogo from "@/components/layout/FuelMapLogo";
+import SignUpForm from "./SignUpForm";
+import { fadeRightAnimation, fadeUpAnimation } from "@/lib/motion.utils";
 
-const Signup = () => {
-  const [showPass, setShowPass] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    if (!formData.firstName || !formData.email || !formData.password) {
-      toast.error("Please fill required fields");
-      setLoading(false);
-      return;
-    }
-
-    console.log(formData);
-
-    setTimeout(() => {
-      toast.success("Account Created");
-      setLoading(false);
-    }, 800);
-  };
-
+export default function RegisterPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f172a] p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-2xl p-6 space-y-5">
-          {/* Header */}
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-white">Create Account</h2>
-            <p className="text-slate-400 text-sm">Join FuelMap.bd</p>
-          </div>
+    <div className="relative min-h-screen w-full overflow-hidden bg-zinc-50 dark:bg-zinc-950">
+      <Image
+        src="/img/loginIMG.jpg"
+        alt=""
+        fill
+        className="object-cover brightness-[1.04]"
+        priority
+        sizes="100vw"
+      />
 
-          {/* Form */}
-          <form onSubmit={onSubmit} className="space-y-3">
-            <input
-              name="firstName"
-              placeholder="First Name"
-              value={formData.firstName}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg bg-white/10 text-white border border-white/10 outline-none"
-            />
+      <div className="absolute inset-0 hidden bg-gradient-to-br from-zinc-950/78 via-zinc-950/62 to-cyan-950/28 dark:block" />
+      <div className="absolute inset-0 hidden bg-gradient-to-t from-black/42 via-transparent to-black/18 dark:block" />
+      <div className="absolute inset-0 hidden bg-[radial-gradient(ellipse_75%_55%_at_50%_-15%,rgba(34,211,238,0.075),transparent)] dark:block" />
+      <div
+        className="absolute inset-0 opacity-[0.32]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+          backgroundSize: "64px 64px",
+        }}
+      />
 
-            <input
-              name="lastName"
-              placeholder="Last Name (optional)"
-              value={formData.lastName}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg bg-white/10 text-white border border-white/10 outline-none"
-            />
-
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg bg-white/10 text-white border border-white/10 outline-none"
-            />
-
-            <div className="relative">
-              <input
-                type={showPass ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full p-3 rounded-lg bg-white/10 text-white border border-white/10 outline-none"
-              />
-              <p
-                className="absolute top-3 right-3 cursor-pointer"
-                onClick={() => setShowPass(!showPass)}
-              >
-                {showPass ? <Eye /> : <EyeOff />}
-              </p>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating..." : "Create Account"}
-            </Button>
-          </form>
-
-          {/* Footer */}
-          <p className="text-center text-xs text-slate-500">
-            Already have an account?{" "}
-            <span className="text-blue-400 cursor-pointer">
-              <Link href={"./login"}>Login</Link>
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-10 lg:flex-row lg:items-center lg:gap-12 lg:px-8">
+        <motion.div
+          className="mb-10 flex flex-1 flex-col justify-center lg:mb-0"
+          {...fadeRightAnimation(28, 0.55, 0)}
+        >
+          <Link
+            href="/"
+            className="mb-8 inline-flex w-fit items-center gap-2 text-sm font-medium text-zinc-600 transition-colors hover:text-cyan-700 dark:text-zinc-400 dark:hover:text-cyan-400"
+          >
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-zinc-300/70 bg-white/70 text-cyan-700 dark:border-white/10 dark:bg-white/5 dark:text-cyan-400">
+              <FuelMapLogo className="h-[22px] w-[22px]" />
             </span>
-          </p>
+            FuelMap.bd
+          </Link>
+
+          <motion.h1
+            className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl"
+            {...fadeUpAnimation(20, 0.5, 0.08)}
+          >
+            Start your journey,
+            <span className="block bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+              with smarter fuel planning.
+            </span>
+          </motion.h1>
+
+          <motion.p
+            className="mt-5 max-w-md text-base leading-relaxed text-zinc-600 dark:text-zinc-400"
+            {...fadeUpAnimation(16, 0.45, 0.14)}
+          >
+            Create your account to track nearby stations, check availability,
+            and plan faster routes across Bangladesh.
+          </motion.p>
+
+          <motion.div
+            className="mt-8 flex flex-wrap gap-3"
+            {...fadeUpAnimation(12, 0.4, 0.22)}
+          >
+            {["Easy signup", "Live map", "Trip ready"].map((label) => (
+              <span
+                key={label}
+                className="rounded-full border border-zinc-300/70 bg-white/60 px-3 py-1 text-xs font-medium text-zinc-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300"
+              >
+                {label}
+              </span>
+            ))}
+          </motion.div>
+        </motion.div>
+
+        <div className="flex w-full flex-1 items-center justify-center lg:justify-end">
+          <SignUpForm />
         </div>
       </div>
     </div>
   );
-};
-
-export default Signup;
+}
