@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/hooks/reduxHooks";
 import UserDropdown from "./UserDropdown";
+import FuelMapLogo from "./FuelMapLogo";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -19,8 +20,9 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
         <Link href="/">
           <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-xl border bg-card" />{" "}
-            {/* for logo */}
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border bg-card text-cyan-600 dark:text-cyan-400">
+              <FuelMapLogo className="h-[22px] w-[22px]" />
+            </span>
             <span className="text-xl font-bold tracking-tight font-salsa">
               FuelMap.bd
             </span>

@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,8 +12,18 @@ import { useAppDispatch } from "@/hooks/reduxHooks";
 import { setAuth } from "@/context/slice/auth.slice";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Fuel, LogIn } from "lucide-react";
 import { useState } from "react";
+import { motion } from "motion/react";
+import {
+  fadeUp,
+  fadeUpAnimation,
+  fadeRightAnimation,
+} from "@/lib/motion.utils";
+
+/** Glass inputs — blur + low tint, no heavy fill */
+const inputDark =
+  "h-11 rounded-xl border border-white/[0.12] bg-white/[0.04] px-3.5 text-slate-100 shadow-none placeholder:text-slate-400/80 backdrop-blur-md transition-[border-color,background-color,box-shadow] focus-visible:border-white/25 focus-visible:bg-white/[0.07] focus-visible:shadow-[0_0_0_3px_rgba(255,255,255,0.06)] focus-visible:ring-0";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -54,149 +56,174 @@ const LoginForm = () => {
       dispatch(setAuth(res));
       router.replace("/");
       toast.success("Welcome Back 🎉");
-    } catch (error: any) {
-      toast.error(error);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : String(error));
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f172a] relative overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-emerald-600/20 rounded-full blur-[120px]" />
+    <motion.div
+      className="w-full max-w-[420px]"
+      variants={fadeUp}
+      initial="hidden"
+      animate="visible"
+      custom={{ delay: 0.05, y: 24 }}
+    >
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.14] bg-black/25 p-8 shadow-[0_24px_64px_-12px_rgba(0,0,0,0.55)] backdrop-blur-2xl backdrop-saturate-150 supports-[backdrop-filter]:bg-black/15">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent opacity-50" />
 
-      <div className="w-full max-w-md z-10">
-        <div className="backdrop-blur-2xl bg-white/5 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl p-8 space-y-8 m-4">
-          <div className="text-center space-y-3">
-            <div className="space-y-1">
-              <h2 className="text-3xl font-extrabold text-white tracking-tight">
-                Welcome
-                <span className="inline-block animate-bounce">👋</span>
-              </h2>
-              <p className="text-slate-400 text-sm font-medium">
-                Login to <span className="text-blue-400">FuelMap.bd</span>
-              </p>
-            </div>
+        <motion.div
+          className="relative space-y-3 text-center"
+          {...fadeUpAnimation(14, 0.4, 0.02)}
+        >
+          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-sm">
+            <Fuel className="h-5 w-5 text-slate-200" />
           </div>
+          <h2 className="bg-gradient-to-br from-white via-slate-100 to-slate-400 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
+            Sign in
+          </h2>
+          <p className="text-sm text-slate-300/80">
+            Welcome back — continue to your dashboard.
+          </p>
+        </motion.div>
 
-          {/* Form */}
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-              {/* Email */}
-              <div className="space-y-2 group">
-                <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
-                  Email Address
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="relative mt-8 space-y-5"
+          >
+            <motion.div {...fadeUpAnimation(12, 0.35, 0.06)} className="space-y-2">
+              <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-400/90">
+                <span className="h-1 w-1 rounded-full bg-white/40" aria-hidden />
+                Email
+              </label>
+              <GInput.Form
+                type="email"
+                name="email"
+                label=""
+                control={form.control}
+                placeholder="you@example.com"
+                className={inputDark}
+              />
+            </motion.div>
+
+            <motion.div {...fadeUpAnimation(12, 0.35, 0.1)} className="space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-400/90">
+                  <span className="h-1 w-1 rounded-full bg-white/40" aria-hidden />
+                  Password
                 </label>
-                <div className="transition-all duration-300 group-focus-within:scale-[1.01]">
-                  <GInput.Form
-                    type="email"
-                    name="email"
-                    label=""
-                    control={form.control}
-                    placeholder="name@example.com"
-                  />
-                </div>
+                <button
+                  type="button"
+                  className="text-xs font-medium text-slate-300/90 underline-offset-2 transition-colors hover:text-white"
+                >
+                  Forgot password?
+                </button>
               </div>
-
-              {/* Password */}
-              <div className="space-y-2 group">
-                <div className="flex justify-between items-center">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
-                    Password
-                  </label>
-                  <button
-                    type="button"
-                    className="text-xs text-blue-400 hover:text-blue-300"
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
-
-                <div className="transition-all duration-300 group-focus-within:scale-[1.01] relative">
-                  <GInput.Form
-                    type={showPass ? "text" : "password"}
-                    name="password"
-                    label=""
-                    control={form.control}
-                    placeholder="password"
-                  />
-                  <p
-                    className="absolute top-1.5 right-2 cursor-pointer"
-                    onClick={() => setShowPass(!showPass)}
-                  >
-                    {showPass ? <Eye /> : <EyeOff />}
-                  </p>
-                </div>
+              <div className="relative">
+                <GInput.Form
+                  type={showPass ? "text" : "password"}
+                  name="password"
+                  label=""
+                  control={form.control}
+                  placeholder="••••••••"
+                  className={`${inputDark} pr-11`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPass(!showPass)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
+                  aria-label={showPass ? "Hide password" : "Show password"}
+                >
+                  {showPass ? (
+                    <Eye className="h-4 w-4" />
+                  ) : (
+                    <EyeOff className="h-4 w-4" />
+                  )}
+                </button>
               </div>
+            </motion.div>
 
-              {/* Button */}
+            <motion.div {...fadeUpAnimation(10, 0.35, 0.14)}>
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting}
-                className={`
-                relative w-full overflow-hidden rounded-2xl py-4 font-bold text-white tracking-wide
-                transition-all duration-300 active:scale-[0.98]
-                ${
-                  form.formState.isSubmitting
-                    ? "bg-slate-700 cursor-not-allowed"
-                    : "bg-gradient-to-r from-blue-600 to-blue-500 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
-                }
-              `}
+                className="relative h-12 w-full rounded-xl border-0 bg-gradient-to-r from-sky-500 via-teal-500 to-emerald-600 font-semibold text-white shadow-[0_8px_28px_-6px_rgba(20,184,166,0.45),0_0_0_1px_rgba(255,255,255,0.08)_inset] transition-all hover:from-sky-400 hover:via-teal-400 hover:to-emerald-500 hover:shadow-[0_12px_36px_-8px_rgba(45,212,191,0.4)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:shadow-none"
               >
                 <span
-                  className={`flex items-center justify-center transition-opacity ${
-                    form.formState.isSubmitting ? "opacity-0" : "opacity-100"
-                  }`}
+                  className={
+                    form.formState.isSubmitting ? "invisible" : "inline-flex items-center gap-2"
+                  }
                 >
-                  Sign In
+                  <LogIn className="h-4 w-4" />
+                  Sign in
                 </span>
-
                 {form.formState.isSubmitting && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  </div>
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  </span>
                 )}
               </Button>
-            </form>
-          </Form>
+            </motion.div>
+          </form>
+        </Form>
 
-          <div className="relative flex items-center py-2">
-            <div className="flex-grow border-t border-white/10"></div>
-            <span className="mx-4 text-xs font-bold text-slate-600 uppercase tracking-widest">
-              Or Continue With
-            </span>
-            <div className="flex-grow border-t border-white/10"></div>
-          </div>
+        <motion.div
+          className="relative mt-8 flex items-center gap-3"
+          {...fadeUpAnimation(8, 0.3, 0.18)}
+        >
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-white/10" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400/80">
+            or
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/20 to-white/10" />
+        </motion.div>
 
-          {/* Social */}
-          <div className="grid grid-cols-2 gap-4">
-            <button className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-sm font-medium text-white">
-              <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
-                className="w-5 h-5"
-              />
-              Google
-            </button>
-            <button className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-sm font-medium text-white">
-              <img
-                src="https://www.svgrepo.com/show/475647/facebook-color.svg"
-                className="w-5 h-5"
-              />
-              Facebook
-            </button>
-          </div>
+        <motion.div
+          className="relative mt-6 grid grid-cols-2 gap-3"
+          {...fadeUpAnimation(10, 0.35, 0.22)}
+        >
+          <button
+            type="button"
+            className="flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.05] py-2.5 text-sm font-medium text-slate-100 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/[0.1]"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://www.svgrepo.com/show/475656/google-color.svg"
+              alt=""
+              className="h-5 w-5"
+            />
+            Google
+          </button>
+          <button
+            type="button"
+            className="flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.05] py-2.5 text-sm font-medium text-slate-100 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/[0.1]"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://www.svgrepo.com/show/475647/facebook-color.svg"
+              alt=""
+              className="h-5 w-5"
+            />
+            Facebook
+          </button>
+        </motion.div>
 
-          {/* Footer */}
-          <p className="text-center text-sm text-slate-500">
-            Don't have an account?{" "}
-            <Link href={"./register"}>
-              <span className="text-blue-400 font-bold hover:text-blue-300 hover:underline cursor-pointer">
-                Sign up
-              </span>
-            </Link>
-          </p>
-        </div>
+        <motion.p
+          className="relative mt-8 text-center text-sm text-slate-400/90"
+          {...fadeRightAnimation(8, 0.35, 0.26)}
+        >
+          No account?{" "}
+          <Link
+            href="/register"
+            className="font-semibold text-white/95 underline-offset-2 transition-colors hover:text-white hover:underline"
+          >
+            Create one
+          </Link>
+        </motion.p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

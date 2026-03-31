@@ -1,8 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useState } from "react";
-import { MapPin, Navigation } from "lucide-react";
+import { useEffect, useState } from "react";
+import { MapPin } from "lucide-react";
 import { useForm } from "react-hook-form";
 import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,10 @@ import GAmount from "@/components/common/GAmount";
 import { axiosMessage } from "@/lib/axios-error";
 import type { IStation } from "@/interface/station.interface";
 import { fetchNearbyStations } from "@/service/stations.service";
+import FuelMapLogo from "@/components/layout/FuelMapLogo";
+import useAsyncAction from "@/hooks/useAsyncAction";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
+import { setLastLocation } from "@/context/slice/location.slice";
 
 const StationMap = dynamic(() => import("@/components/feature/StationMap"), {
   ssr: false,
@@ -22,13 +26,15 @@ const StationMap = dynamic(() => import("@/components/feature/StationMap"), {
 const RAJSHAHI = { lat: 24.3745, lng: 88.6042 };
 
 export default function MapPage() {
-  const [center, setCenter] = useState(RAJSHAHI);
+  const dispatch = useAppDispatch();
+  const lastLocation = useAppSelector((state) => state.location.lastLocation);
+  const startCenter = lastLocation ?? RAJSHAHI;
+
+  const [center, setCenter] = useState(startCenter);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [stations, setStations] = useState<IStation[]>([]);
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [radius, setRadius] = useState<number>(10); // Default 10km
 
   const form = useForm<{ radius: number }>({
     defaultValues: {
@@ -36,26 +42,32 @@ export default function MapPage() {
     },
   });
 
-  // Watch form value changes
-  const watchedRadius = form.watch('radius');
+  // Always take the latest radius from the form; fallback to default.
+  const watchedRadius = form.watch("radius");
+  const radiusKmRaw = Number(watchedRadius);
+  // Backend validation (meters) is 100..25000, so in km it's 0.1..25.
+  const radiusKm = Number.isFinite(radiusKmRaw) ? radiusKmRaw : 10;
+  const radiusKmClamped = Math.max(0.1, Math.min(25, radiusKm));
 
-  useEffect(() => {
-    if (watchedRadius && watchedRadius >= 1 && watchedRadius <= 100) {
-      setRadius(watchedRadius);
+  // Same pattern as `stations/page.tsx` uses: action() + onLoading + data
+  const fnLoadNearby = useAsyncAction(
+    async (lat: number, lng: number, radiusKmArg: number) => {
+      const radiusInMeters = radiusKmArg * 1000; // Convert km to meters
+      return fetchNearbyStations(lat, lng, radiusInMeters);
     }
-  }, [watchedRadius]);
+  );
 
-  const loadNearby = useCallback(async (lat: number, lng: number) => {
-    setLoading(true);
+  const loading = fnLoadNearby.onLoading;
+
+  const loadAndRenderNearby = async (lat: number, lng: number, radiusKmArg: number) => {
     setError(null);
     setMessage(null);
     try {
-      const radiusInMeters = radius * 1000; // Convert km to meters
-      const res = await fetchNearbyStations(lat, lng, radiusInMeters);
+      const res = await fnLoadNearby.action(lat, lng, radiusKmArg);
       setStations(res.stations);
       setCenter({ lat, lng });
       setMessage(
-        `${res.count} fuel station${res.count === 1 ? "" : "s"} found within ${radius}km — OpenStreetMap data${
+        `${res.count} fuel station${res.count === 1 ? "" : "s"} found within ${radiusKmArg}km — OpenStreetMap data${
           res.persisted ? ", saved to database" : ""
         }`
       );
@@ -66,17 +78,19 @@ export default function MapPage() {
       setError(msg);
       setStations([]);
     } finally {
-      setLoading(false);
+      // `useAsyncAction` handles `onLoading`, so no need to set it here.
     }
-  }, []);
+  };
 
   const handleSubmit = () => {
-    void loadNearby(center.lat, center.lng);
+    void loadAndRenderNearby(center.lat, center.lng, radiusKmClamped);
   };
 
   useEffect(() => {
-    void loadNearby(RAJSHAHI.lat, RAJSHAHI.lng);
-  }, [loadNearby]);
+    void loadAndRenderNearby(startCenter.lat, startCenter.lng, radiusKmClamped);
+    // Keep initial load only (same behavior as before).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onUseLocation = () => {
     if (!navigator.geolocation) {
@@ -88,7 +102,12 @@ export default function MapPage() {
       (pos) => {
         const location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         setUserLocation(location);
-        void loadNearby(pos.coords.latitude, pos.coords.longitude);
+        dispatch(setLastLocation(location));
+        void loadAndRenderNearby(
+          pos.coords.latitude,
+          pos.coords.longitude,
+          radiusKmClamped
+        );
       },
       () => {
         setError(
@@ -144,7 +163,7 @@ export default function MapPage() {
               variant="outline"
               size="sm"
               disabled={loading}
-              onClick={() => void loadNearby(center.lat, center.lng)}
+              onClick={() => void loadAndRenderNearby(center.lat, center.lng, radiusKmClamped)}
             >
               <MapPin className="mr-1.5 h-4 w-4" />
               Refresh area
@@ -155,7 +174,7 @@ export default function MapPage() {
               disabled={loading}
               onClick={onUseLocation}
             >
-              <Navigation className="mr-1.5 h-4 w-4" />
+              <FuelMapLogo className="mr-1.5 h-4 w-4" />
               My location
             </Button>
           </div>

@@ -28,6 +28,11 @@ export const metadata: Metadata = {
   title: "Fuel Map",
   description:
     "Find petrol and diesel stations across Bangladesh with FuelMap.bd. Check fuel availability, station locations, and save time on your refueling trips.",
+  icons: {
+    icon: { url: "/favicon.svg", type: "image/svg+xml" },
+    shortcut: { url: "/favicon.svg", type: "image/svg+xml" },
+    apple: { url: "/favicon.svg", type: "image/svg+xml" },
+  },
 };
 
 interface IProps {

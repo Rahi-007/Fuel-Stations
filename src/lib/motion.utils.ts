@@ -12,15 +12,17 @@ export const fadeRightAnimation = (x = 20, duration = 0.5, delay = 0) => ({
   transition: { duration, delay },
 });
 
-//W---------={ FadeUp Animation }=----------</br>
+//W---------={ FadeUp variants (use with custom: { y, delay }) }=----------</br>
+type FadeUpCustom = { y?: number; delay?: number };
+
 export const fadeUp = {
-  hidden: (y = 0) => ({
+  hidden: (custom?: FadeUpCustom) => ({
     opacity: 0,
-    y: y,
+    y: custom?.y ?? 20,
   }),
-  visible: ({ delay = 0, y = 0 } = {}) => ({
+  visible: (custom?: FadeUpCustom) => ({
     opacity: 1,
-    y: y,
-    transition: { duration: 0.8, delay },
+    y: 0,
+    transition: { duration: 0.8, delay: custom?.delay ?? 0 },
   }),
 };

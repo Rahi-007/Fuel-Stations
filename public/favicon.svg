@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- FuelMap favicon (location pin + fuel dot) -->
+  <g transform="translate(12 12) scale(1.25) translate(-12 -12)">
+    <path
+      d="M12 6.5c-1.7 0-3.08 1.38-3.08 3.08 0 2.35 3.08 5.88 3.08 5.88s3.08-3.53 3.08-5.88c0-1.7-1.38-3.08-3.08-3.08Z"
+      fill="#06b6d4"
+    />
+    <circle cx="12" cy="11" r="2.4" fill="#cffafe" />
+  </g>
+</svg>
+

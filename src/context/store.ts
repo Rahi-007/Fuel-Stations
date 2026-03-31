@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "./slice/auth.slice";
+import locationSlice from "./slice/location.slice";
 import { logger } from "./middleware/logger";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
+    location: locationSlice,
   },
   devTools: process.env.NODE_ENV === "development",
   middleware: (getDefaultMiddleware) =>
