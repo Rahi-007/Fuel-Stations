@@ -15,8 +15,6 @@ export default function EditDivisionPage() {
   useEffect(() => {
     getStation.action(stationId);
   }, []);
-  
-  console.log(getStation.data);
 
   return (
     <AdminGuard>

@@ -42,7 +42,7 @@ export interface UpdateStation {
 }
 
 export interface NearbyStationsResponse {
-  source: string;
+  source: "database" | "openstreetmap" | "database+openstreetmap";
   attribution: string;
   count: number;
   stations: IStation[];

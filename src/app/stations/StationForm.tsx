@@ -1,19 +1,15 @@
-import GSelect from "@/components/common/GSelect";
+import useAsyncAction from "@/hooks/useAsyncAction";
+import { DivisionSelect, DistrictSelect, SubDistrictSelect } from "@/components/common/LocationSelect";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import useAsyncAction from "@/hooks/useAsyncAction";
 import { IStation, OsmType } from "@/interface/station.interface";
-import { urlWithState } from "@/lib/global.utils";
-import { loadDistricts } from "@/service/district.service";
-import { loadDivisions } from "@/service/division.service";
 import { editStation } from "@/service/stations.service";
-import { loadSubDistricts } from "@/service/sub-district.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import GInput from "@/components/common/GInput";
 
 export const updateStationSchema = z.object({
   osmRef: z.enum(OsmType).optional(),
@@ -25,7 +21,7 @@ export const updateStationSchema = z.object({
   districtId: z.number().optional(),
   subDistrictId: z.number().optional(),
   village: z.string().optional(),
-  tags: z.number().optional(),
+  // tags: z.number().optional(),
 });
 
 interface IProps {
@@ -37,86 +33,36 @@ export type StationFormValues = z.infer<typeof updateStationSchema>;
 const StationForm = (props: IProps) => {
   const router = useRouter();
   const fnEditStation = useAsyncAction(editStation);
-  const fnLoadDivisions = useAsyncAction(loadDivisions);
-  const fnLoadDistricts = useAsyncAction(loadDistricts);
-  const fnLoadSubDistricts = useAsyncAction(loadSubDistricts);
 
   const form = useForm<StationFormValues>({
     resolver: zodResolver(updateStationSchema),
     defaultValues: {
       name: props.defaultValues?.name || "",
-      //   osmType: props.defaultValues?.osmType || OsmType.Node,
       brand: props.defaultValues?.brand || "",
       lat: props.defaultValues?.lat || 0,
       lng: props.defaultValues?.lng || 0,
-      //   tags: props.defaultValues?.tags || 0,
-      divisionId: props.defaultValues?.division?.id || 0,
-      // districtId: props.defaultValues?.district.id || undefined,
-      // subDistrictId: props.defaultValues?.subDistrict.id || 0,
+      divisionId: props.defaultValues?.division?.id || undefined,
+      districtId: props.defaultValues?.district?.id || undefined,
+      subDistrictId: props.defaultValues?.subDistrict?.id || undefined,
       village: props.defaultValues?.village || "",
+      // tags: props.defaultValues?.tags ? Number(props.defaultValues.tags) : undefined,
     },
   });
 
-  const divisionOptions = useMemo(() => {
-    const list = fnLoadDivisions.data ?? [];
+  // Watch values for location selector
+  const divisionId = form.watch("divisionId");
+  const districtId = form.watch("districtId");
 
-    return [...list]
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map((d) => ({
-        label: d.name,
-        value: String(d.id),
-      }));
-  }, [fnLoadDivisions.data]);
+  async function onSubmit(values: StationFormValues) {
+    try {
+      if (props.defaultValues) {
+        await fnEditStation.action(props.defaultValues.id, values);
 
-  const districtOptions = useMemo(() => {
-    const list = fnLoadDistricts.data ?? [];
-
-    return [...list]
-      .sort((a, b) => {
-        const da = a.division?.name ?? "";
-        const db = b.division?.name ?? "";
-        if (da !== db) return da.localeCompare(db);
-        return a.name.localeCompare(b.name);
-      })
-      .map((d) => ({
-        label: d.division?.name ? `${d.division.name} — ${d.name}` : d.name,
-        value: String(d.id),
-      }));
-  }, [fnLoadDistricts.data]);
-
-  const subDistrictOptions = useMemo(() => {
-    const list = fnLoadSubDistricts.data ?? [];
-
-    return [...list]
-      .sort((a, b) => {
-        const da = a.district?.name ?? "";
-        const db = b.district?.name ?? "";
-        if (da !== db) return da.localeCompare(db);
-        return a.name.localeCompare(b.name);
-      })
-      .map((s) => ({
-        label: s.district?.name ? `${s.district.name} — ${s.name}` : s.name,
-        value: String(s.id),
-      }));
-  }, [fnLoadSubDistricts.data]);
-
-  useEffect(() => {
-    fnLoadDivisions.action();
-    fnLoadDistricts.action();
-    fnLoadSubDistricts.action();
-  }, []);
-
-  function onSubmit(values: StationFormValues) {
-    if (props.defaultValues) {
-      fnEditStation
-        .action(props.defaultValues.id, values)
-        .then(() => {
-          toast.success("Station updated successfully");
-          router.push(`/stations`);
-        })
-        .catch((error) => {
-          toast.error(error);
-        });
+        toast.success("Station updated successfully");
+        router.push(`/stations`);
+      }
+    } catch (error) {
+      toast.error(String(error));
     }
   }
 
@@ -126,35 +72,31 @@ const StationForm = (props: IProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 max-w-lg"
       >
-        <GSelect.Form
+        <DivisionSelect
           control={form.control}
           name="divisionId"
-          label="Division"
-          placeholder="Select Division"
-          valueAsNumber
-          loading={fnLoadDivisions.onLoading}
-          loadingPlaceholder="Loading division..."
-          options={divisionOptions}
+          required
         />
-        <GSelect.Form
+
+        <DistrictSelect
           control={form.control}
           name="districtId"
-          label="District"
-          placeholder="Select district"
-          valueAsNumber
-          loading={fnLoadDistricts.onLoading}
-          loadingPlaceholder="Loading districts..."
-          options={districtOptions}
+          divisionId={divisionId}
+          required
         />
-        <GSelect.Form
+
+        <SubDistrictSelect
           control={form.control}
           name="subDistrictId"
-          label="Sub District"
-          placeholder="Select Sub-District"
-          valueAsNumber
-          loading={fnLoadSubDistricts.onLoading}
-          loadingPlaceholder="Loading sub-Districts..."
-          options={subDistrictOptions}
+          districtId={districtId}
+          required
+        />
+
+        <GInput.Form
+          control={form.control}
+          name="village"
+          label="Village"
+          required
         />
 
         <div className="flex flex-wrap gap-2 pt-2">

@@ -66,16 +66,21 @@ function FormSelectBody<T extends FieldValues>({
             onValueChange={
               valueAsNumber ? (v) => field.onChange(Number(v)) : field.onChange
             }
+            // value={
+            //   loading
+            //     ? undefined
+            //     : valueAsNumber
+            //       ? typeof field.value === "number" && field.value > 0
+            //         ? String(field.value)
+            //         : undefined
+            //       : field.value != null && field.value !== ""
+            //         ? String(field.value)
+            //         : undefined
+            // }
             value={
-              loading
-                ? undefined
-                : valueAsNumber
-                  ? typeof field.value === "number" && field.value > 0
-                    ? String(field.value)
-                    : undefined
-                  : field.value != null && field.value !== ""
-                    ? String(field.value)
-                    : undefined
+              field.value !== undefined && field.value !== null && field.value !== ""
+                ? String(field.value)
+                : undefined
             }
             disabled={isBusy}
           >
