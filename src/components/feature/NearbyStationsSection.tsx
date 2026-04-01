@@ -5,16 +5,22 @@ import { motion } from "motion/react";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { fetchNearbyStations } from "@/service/stations.service";
-import type { IStation, NearbyStationsResponse } from "@/interface/station.interface";
+import type {
+  NearbyStation,
+  NearbyStationsResponse,
+} from "@/interface/station.interface";
 import { axiosMessage } from "@/lib/axios-error";
 import { fadeUpAnimation } from "@/lib/motion.utils";
+import Link from "next/link";
 
 export default function NearbyStationsSection() {
-  const [nearbyStations, setNearbyStations] = useState<IStation[]>([]);
+  const [nearbyStations, setNearbyStations] = useState<NearbyStation[]>([]);
   const [nearbyLoading, setNearbyLoading] = useState(false);
   const [nearbyError, setNearbyError] = useState<string | null>(null);
   const [nearbyInfo, setNearbyInfo] = useState<string | null>(null);
-  const [nearbySource, setNearbySource] = useState<NearbyStationsResponse["source"] | null>(null);
+  const [nearbySource, setNearbySource] = useState<
+    NearbyStationsResponse["source"] | null
+  >(null);
 
   const handleUseLocationPreview = () => {
     if (!navigator.geolocation) {
@@ -53,7 +59,9 @@ export default function NearbyStationsSection() {
       },
       () => {
         setNearbyLoading(false);
-        setNearbyError("Location permission denied. Please allow location access.");
+        setNearbyError(
+          "Location permission denied. Please allow location access."
+        );
         setNearbySource(null);
       }
     );
@@ -105,21 +113,24 @@ export default function NearbyStationsSection() {
       {nearbyStations.length > 0 ? (
         <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {nearbyStations.map((s) => (
-            <div key={s.id} className="rounded-lg border bg-background/70 p-3">
+            <Link
+              key={s.id}
+              href={`/stations/${s.id}`}
+              className="rounded-lg border bg-background/70 p-3 transition hover:bg-background/90 hover:shadow-sm"
+            >
               <p className="text-sm font-medium text-foreground">
                 {s.name ?? s.brand ?? "Fuel station"}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
                 {s.village ??
-                  s.subDistrict?.name ??
-                  s.district?.name ??
+                  s.subDistrict ??
+                  s.district ??
                   "Location not specified"}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       ) : null}
     </motion.section>
   );
 }
-

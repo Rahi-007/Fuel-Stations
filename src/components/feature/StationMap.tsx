@@ -10,7 +10,7 @@ import {
   TileLayer,
   useMap,
 } from "react-leaflet";
-import type { IStation } from "@/interface/station.interface";
+import type { NearbyStation } from "@/interface/station.interface";
 import "leaflet/dist/leaflet.css";
 import { MapPin, Fuel } from "lucide-react";
 
@@ -80,7 +80,7 @@ function MapRecenter({ lat, lng }: { lat: number; lng: number }) {
 interface StationMapProps {
   centerLat: number;
   centerLng: number;
-  stations: IStation[];
+  stations: NearbyStation[];
   userLocation?: { lat: number; lng: number };
 }
 
@@ -102,7 +102,7 @@ export default function StationMap({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MapRecenter lat={centerLat} lng={centerLng} />
-      
+
       {/* User location marker */}
       {userLocation && (
         <Marker
@@ -113,13 +113,9 @@ export default function StationMap({
           <Popup>Your current location</Popup>
         </Marker>
       )}
-      
+
       {stations.map((s) => (
-        <Marker
-          key={s.id}
-          position={[s.lat, s.lng]}
-          icon={fuelStationIcon}
-        >
+        <Marker key={s.id} position={[s.lat, s.lng]} icon={fuelStationIcon}>
           <Popup>
             <div className="min-w-40">
               <div className="text-sm font-medium">
@@ -130,10 +126,10 @@ export default function StationMap({
               ) : null}
               {(s.district || s.subDistrict || s.village || s.division) && (
                 <div className="mt-1 space-y-0.5 text-[10px] text-neutral-500">
-                  {s.division ? <div>Division: {s.division.id}</div> : null}
-                  {s.district ? <div>District: {s.district.id}</div> : null}
+                  {s.division ? <div>Division: {s.division}</div> : null}
+                  {s.district ? <div>District: {s.district}</div> : null}
                   {s.subDistrict ? (
-                    <div>Sub-district: {s.subDistrict.id}</div>
+                    <div>Sub-district: {s.subDistrict}</div>
                   ) : null}
                   {s.village ? <div>Area: {s.village}</div> : null}
                 </div>

@@ -74,9 +74,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 flex flex-col gap-2 rounded-xl border border-border/70 bg-background/90 px-3 py-2 text-xs">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="font-medium text-foreground">
-                    * Live stations
-                  </p>
+                  <p className="font-medium text-foreground">* Live stations</p>
                   <span className="rounded-full bg-red-500/80 px-2 py-0.5 text-[10px] font-semibold text-white -500">
                     Out Of Stock
                   </span>

@@ -93,9 +93,15 @@ const LoginForm = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="relative mt-8 space-y-5"
           >
-            <motion.div {...fadeUpAnimation(12, 0.35, 0.06)} className="space-y-2">
+            <motion.div
+              {...fadeUpAnimation(12, 0.35, 0.06)}
+              className="space-y-2"
+            >
               <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-slate-400/90">
-                <span className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40" aria-hidden />
+                <span
+                  className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40"
+                  aria-hidden
+                />
                 Email
               </label>
               <GInput.Form
@@ -108,10 +114,16 @@ const LoginForm = () => {
               />
             </motion.div>
 
-            <motion.div {...fadeUpAnimation(12, 0.35, 0.1)} className="space-y-2">
+            <motion.div
+              {...fadeUpAnimation(12, 0.35, 0.1)}
+              className="space-y-2"
+            >
               <div className="flex items-center justify-between gap-2">
                 <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-slate-400/90">
-                  <span className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40" aria-hidden />
+                  <span
+                    className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40"
+                    aria-hidden
+                  />
                   Password
                 </label>
                 <button
@@ -153,7 +165,9 @@ const LoginForm = () => {
               >
                 <span
                   className={
-                    form.formState.isSubmitting ? "invisible" : "inline-flex items-center gap-2"
+                    form.formState.isSubmitting
+                      ? "invisible"
+                      : "inline-flex items-center gap-2"
                   }
                 >
                   <LogIn className="h-4 w-4" />

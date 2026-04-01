@@ -3,6 +3,7 @@ import { api, API_URLS } from "@/config/configURL";
 import type {
   NearbyStationsResponse,
   IStation,
+  StationComment,
   UpdateStation,
 } from "@/interface/station.interface";
 import { Pagination, SearchParams } from "@/interface/base.interface";
@@ -67,6 +68,77 @@ export function editStation(id: number, data: Partial<UpdateStation>) {
       const response = await axios.put<any, AxiosResponse<IStation>>(
         API_URLS.stations.update(id),
         data
+      );
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function likeStation(stationId: number) {
+  return new Promise<void>(async (resolve, reject) => {
+    try {
+      await axios.post(API_URLS.stations.like(), { stationId });
+      resolve();
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function unlikeStation(stationId: number) {
+  return new Promise<void>(async (resolve, reject) => {
+    try {
+      await axios.delete(API_URLS.stations.unlike(stationId));
+      resolve();
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function followStation(stationId: number) {
+  return new Promise<void>(async (resolve, reject) => {
+    try {
+      await axios.post(API_URLS.stations.follow(), { stationId });
+      resolve();
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function unfollowStation(stationId: number) {
+  return new Promise<void>(async (resolve, reject) => {
+    try {
+      await axios.delete(API_URLS.stations.unfollow(stationId));
+      resolve();
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function loadCommentsByStation(stationId: number) {
+  return new Promise<StationComment[]>(async (resolve, reject) => {
+    try {
+      const response = await axios.get<any, AxiosResponse<StationComment[]>>(
+        API_URLS.stations.comments(stationId)
+      );
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function createStationComment(stationId: number, text: string) {
+  return new Promise<StationComment>(async (resolve, reject) => {
+    try {
+      const response = await axios.post<any, AxiosResponse<StationComment>>(
+        API_URLS.stations.commentCreate(),
+        { stationId, text }
       );
       resolve(response.data);
     } catch (error: any) {

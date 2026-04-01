@@ -15,7 +15,11 @@ import GInput from "@/components/common/GInput";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { setAuth } from "@/context/slice/auth.slice";
 import { register, setAxiosAuthToken } from "@/service/auth.service";
-import { fadeUp, fadeUpAnimation, fadeRightAnimation } from "@/lib/motion.utils";
+import {
+  fadeUp,
+  fadeUpAnimation,
+  fadeRightAnimation,
+} from "@/lib/motion.utils";
 
 const inputDark =
   "h-11 rounded-xl border border-zinc-300/70 bg-white/80 px-3.5 text-zinc-900 shadow-none placeholder:text-zinc-500/90 backdrop-blur-md transition-[border-color,background-color,box-shadow] focus-visible:border-cyan-500/40 focus-visible:bg-white focus-visible:shadow-[0_0_0_3px_rgba(14,116,144,0.10)] focus-visible:ring-0 dark:border-white/[0.12] dark:bg-white/[0.04] dark:text-slate-100 dark:placeholder:text-slate-400/80 dark:focus-visible:border-white/25 dark:focus-visible:bg-white/[0.07] dark:focus-visible:shadow-[0_0_0_3px_rgba(255,255,255,0.06)]";
@@ -111,7 +115,10 @@ export default function SignUpForm() {
             >
               <div className="space-y-2">
                 <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-slate-400/90">
-                  <span className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40" aria-hidden />
+                  <span
+                    className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40"
+                    aria-hidden
+                  />
                   First name
                 </label>
                 <GInput.Form
@@ -126,7 +133,10 @@ export default function SignUpForm() {
 
               <div className="space-y-2">
                 <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-slate-400/90">
-                  <span className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40" aria-hidden />
+                  <span
+                    className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40"
+                    aria-hidden
+                  />
                   Last name
                 </label>
                 <GInput.Form
@@ -140,9 +150,15 @@ export default function SignUpForm() {
               </div>
             </motion.div>
 
-            <motion.div {...fadeUpAnimation(12, 0.35, 0.14)} className="space-y-2">
+            <motion.div
+              {...fadeUpAnimation(12, 0.35, 0.14)}
+              className="space-y-2"
+            >
               <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-slate-400/90">
-                <span className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40" aria-hidden />
+                <span
+                  className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40"
+                  aria-hidden
+                />
                 Email
               </label>
               <GInput.Form
@@ -155,9 +171,15 @@ export default function SignUpForm() {
               />
             </motion.div>
 
-            <motion.div {...fadeUpAnimation(12, 0.35, 0.18)} className="space-y-2">
+            <motion.div
+              {...fadeUpAnimation(12, 0.35, 0.18)}
+              className="space-y-2"
+            >
               <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-slate-400/90">
-                <span className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40" aria-hidden />
+                <span
+                  className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40"
+                  aria-hidden
+                />
                 Password
               </label>
               <div className="relative">
@@ -175,14 +197,24 @@ export default function SignUpForm() {
                   className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-200/70 hover:text-zinc-900 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
                   aria-label={showPass ? "Hide password" : "Show password"}
                 >
-                  {showPass ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                  {showPass ? (
+                    <Eye className="h-4 w-4" />
+                  ) : (
+                    <EyeOff className="h-4 w-4" />
+                  )}
                 </button>
               </div>
             </motion.div>
 
-            <motion.div {...fadeUpAnimation(12, 0.35, 0.22)} className="space-y-2">
+            <motion.div
+              {...fadeUpAnimation(12, 0.35, 0.22)}
+              className="space-y-2"
+            >
               <label className="ml-0.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 dark:text-slate-400/90">
-                <span className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40" aria-hidden />
+                <span
+                  className="h-1 w-1 rounded-full bg-zinc-500/60 dark:bg-white/40"
+                  aria-hidden
+                />
                 Confirm password
               </label>
               <div className="relative">
@@ -198,7 +230,11 @@ export default function SignUpForm() {
                   type="button"
                   onClick={() => setShowConfirmPass(!showConfirmPass)}
                   className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-200/70 hover:text-zinc-900 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
-                  aria-label={showConfirmPass ? "Hide confirm password" : "Show confirm password"}
+                  aria-label={
+                    showConfirmPass
+                      ? "Hide confirm password"
+                      : "Show confirm password"
+                  }
                 >
                   {showConfirmPass ? (
                     <Eye className="h-4 w-4" />
@@ -215,7 +251,9 @@ export default function SignUpForm() {
                 disabled={form.formState.isSubmitting}
                 className="relative h-12 w-full rounded-xl border-0 bg-gradient-to-r from-sky-500 via-teal-500 to-emerald-600 font-semibold text-white shadow-[0_8px_28px_-6px_rgba(20,184,166,0.45),0_0_0_1px_rgba(255,255,255,0.08)_inset] transition-all hover:from-sky-400 hover:via-teal-400 hover:to-emerald-500 hover:shadow-[0_12px_36px_-8px_rgba(45,212,191,0.4)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:shadow-none"
               >
-                {form.formState.isSubmitting ? "Creating account..." : "Create account"}
+                {form.formState.isSubmitting
+                  ? "Creating account..."
+                  : "Create account"}
               </Button>
             </motion.div>
           </form>
@@ -237,6 +275,3 @@ export default function SignUpForm() {
     </motion.div>
   );
 }
-
-
-

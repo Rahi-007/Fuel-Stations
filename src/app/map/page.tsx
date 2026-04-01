@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import GAmount from "@/components/common/GAmount";
 import { axiosMessage } from "@/lib/axios-error";
-import type { IStation } from "@/interface/station.interface";
+import type { NearbyStation } from "@/interface/station.interface";
 import { fetchNearbyStations } from "@/service/stations.service";
 import FuelMapLogo from "@/components/layout/FuelMapLogo";
 import useAsyncAction from "@/hooks/useAsyncAction";
@@ -31,8 +31,11 @@ export default function MapPage() {
   const startCenter = lastLocation ?? RAJSHAHI;
 
   const [center, setCenter] = useState(startCenter);
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [stations, setStations] = useState<IStation[]>([]);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [stations, setStations] = useState<NearbyStation[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,7 +62,11 @@ export default function MapPage() {
 
   const loading = fnLoadNearby.onLoading;
 
-  const loadAndRenderNearby = async (lat: number, lng: number, radiusKmArg: number) => {
+  const loadAndRenderNearby = async (
+    lat: number,
+    lng: number,
+    radiusKmArg: number
+  ) => {
     setError(null);
     setMessage(null);
     try {
@@ -100,7 +107,10 @@ export default function MapPage() {
     setError(null);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        const location = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        };
         setUserLocation(location);
         dispatch(setLastLocation(location));
         void loadAndRenderNearby(
@@ -163,7 +173,13 @@ export default function MapPage() {
               variant="outline"
               size="sm"
               disabled={loading}
-              onClick={() => void loadAndRenderNearby(center.lat, center.lng, radiusKmClamped)}
+              onClick={() =>
+                void loadAndRenderNearby(
+                  center.lat,
+                  center.lng,
+                  radiusKmClamped
+                )
+              }
             >
               <MapPin className="mr-1.5 h-4 w-4" />
               Refresh area

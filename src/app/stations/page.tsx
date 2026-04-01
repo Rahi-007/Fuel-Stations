@@ -137,7 +137,7 @@ export default function StationsPage() {
   }, [currentPage]);
 
   const loading = fnLoadStations.onLoading;
-  
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -278,11 +278,17 @@ export default function StationsPage() {
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
-                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(1, prev - 1))
+                  }
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
                 />
               </PaginationItem>
-              
+
               <PaginationItem>
                 <PaginationLink className="cursor-pointer">
                   {currentPage}
@@ -292,7 +298,12 @@ export default function StationsPage() {
               <PaginationItem>
                 <PaginationNext
                   onClick={() => setCurrentPage((prev) => prev + 1)}
-                  className={(!fnLoadStations.data?.data || fnLoadStations.data.data.length < PAGE_LIMIT) ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                  className={
+                    !fnLoadStations.data?.data ||
+                    fnLoadStations.data.data.length < PAGE_LIMIT
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
                 />
               </PaginationItem>
             </PaginationContent>

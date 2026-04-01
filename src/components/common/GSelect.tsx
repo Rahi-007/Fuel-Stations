@@ -78,7 +78,9 @@ function FormSelectBody<T extends FieldValues>({
             //         : undefined
             // }
             value={
-              field.value !== undefined && field.value !== null && field.value !== ""
+              field.value !== undefined &&
+              field.value !== null &&
+              field.value !== ""
                 ? String(field.value)
                 : undefined
             }

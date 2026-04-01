@@ -19,6 +19,12 @@ export const API_URLS = {
     nearby: (lat: number, lng: number, radius = 5000) =>
       api(`stations/nearby?${objectToUrlParams({ lat, lng, radius })}`),
     update: (id: number) => api(`stations/${id}`),
+    like: () => api("stations/like"),
+    unlike: (stationId: number) => api(`stations/like/${stationId}`),
+    follow: () => api("stations/follow"),
+    unfollow: (stationId: number) => api(`stations/follow/${stationId}`),
+    comments: (stationId: number) => api(`stations/${stationId}/comments`),
+    commentCreate: () => api("stations/comment"),
   },
   user: {
     all: (s?: Record<string, any>) =>
