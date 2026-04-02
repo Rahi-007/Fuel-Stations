@@ -73,6 +73,7 @@ export interface NearbyStation {
   district: string | null;
   subDistrict: string | null;
   village: string | null;
+  status?: FuelStatus;
 }
 
 export enum OsmType {
@@ -112,10 +113,22 @@ export interface NearbyStationsResponse {
   persisted?: boolean;
 }
 
+export type StationCommentUser = {
+  id: number;
+  firstName: string;
+  lastName?: string;
+  /** Display name (e.g. first + last) */
+  name: string;
+  avatar?: string;
+};
+
 export type StationComment = {
   id: number;
+  parentId?: number;
   text: string;
   createdAt: string | Date;
   userId: number;
+  /** Included by API for thread UI (name + avatar) */
+  user: StationCommentUser;
   stationId: number;
 };

@@ -5,9 +5,10 @@ import { motion } from "motion/react";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { fetchNearbyStations } from "@/service/stations.service";
-import type {
-  NearbyStation,
-  NearbyStationsResponse,
+import {
+  FuelStatus,
+  type NearbyStation,
+  type NearbyStationsResponse,
 } from "@/interface/station.interface";
 import { axiosMessage } from "@/lib/axios-error";
 import { fadeUpAnimation } from "@/lib/motion.utils";
@@ -42,7 +43,7 @@ export default function NearbyStationsSection() {
             pos.coords.longitude,
             radiusKm * 1000
           );
-          setNearbyStations(res.stations.slice(0, 8));
+          setNearbyStations(res.stations.slice(0, 9));
           setNearbySource(res.source);
           setNearbyInfo(
             `${res.count} station${res.count === 1 ? "" : "s"} found within ${radiusKm}km`
@@ -87,7 +88,7 @@ export default function NearbyStationsSection() {
             Nearby stations from your location
           </h3>
           <p className="text-sm text-muted-foreground">
-            One click preview before opening full map route.
+            Tap to preview stations before opening map
           </p>
         </div>
         <Button onClick={handleUseLocationPreview} disabled={nearbyLoading}>
@@ -96,7 +97,7 @@ export default function NearbyStationsSection() {
         </Button>
       </div>
 
-      {nearbyInfo ? (
+      {/* {nearbyInfo ? (
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <p className="text-sm text-muted-foreground">{nearbyInfo}</p>
           {sourceLabel ? (
@@ -105,10 +106,10 @@ export default function NearbyStationsSection() {
             </span>
           ) : null}
         </div>
-      ) : null}
-      {nearbyError ? (
+      ) : null} */}
+      {/* {nearbyError ? (
         <p className="mt-4 text-sm text-destructive">{nearbyError}</p>
-      ) : null}
+      ) : null} */}
 
       {nearbyStations.length > 0 ? (
         <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -121,11 +122,38 @@ export default function NearbyStationsSection() {
               <p className="text-sm font-medium text-foreground">
                 {s.name ?? s.brand ?? "Fuel station"}
               </p>
+
               <p className="mt-1 text-xs text-muted-foreground">
-                {s.village ??
-                  s.subDistrict ??
-                  s.district ??
-                  "Location not specified"}
+                {[s.village, s.subDistrict, s.district, s.division].filter(
+                  Boolean
+                ).length
+                  ? `Location: ${[
+                      s.village,
+                      s.subDistrict,
+                      s.district,
+                      s.division,
+                    ]
+                      .filter(Boolean)
+                      .join(", ")}`
+                  : "Click to view in map"}
+              </p>
+
+              <p className="mt-2">
+                <span
+                  className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+                    s.status === FuelStatus.AVAILABLE
+                      ? "bg-green-100 text-green-700"
+                      : s.status === FuelStatus.LIMITED
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {s.status === FuelStatus.AVAILABLE
+                    ? "Available"
+                    : s.status === FuelStatus.LIMITED
+                      ? "Limited"
+                      : "Out of stock"}
+                </span>
               </p>
             </Link>
           ))}

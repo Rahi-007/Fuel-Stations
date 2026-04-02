@@ -23,6 +23,9 @@ export const API_URLS = {
     unlike: (stationId: number) => api(`stations/like/${stationId}`),
     follow: () => api("stations/follow"),
     unfollow: (stationId: number) => api(`stations/follow/${stationId}`),
+    likeStatus: (stationId: number) => api(`stations/${stationId}/like-status`),
+    followStatus: (stationId: number) =>
+      api(`stations/${stationId}/follow-status`),
     comments: (stationId: number) => api(`stations/${stationId}/comments`),
     commentCreate: () => api("stations/comment"),
   },

@@ -133,12 +133,47 @@ export function loadCommentsByStation(stationId: number) {
   });
 }
 
-export function createStationComment(stationId: number, text: string) {
+export function getLikeStatus(stationId: number) {
+  return new Promise<{ liked: boolean }>(async (resolve, reject) => {
+    try {
+      const response = await axios.get<any, AxiosResponse<{ liked: boolean }>>(
+        API_URLS.stations.likeStatus(stationId)
+      );
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function getFollowStatus(stationId: number) {
+  return new Promise<{ followed: boolean }>(async (resolve, reject) => {
+    try {
+      const response = await axios.get<
+        any,
+        AxiosResponse<{ followed: boolean }>
+      >(API_URLS.stations.followStatus(stationId));
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function createStationComment(
+  stationId: number,
+  text: string,
+  parentId?: number
+) {
   return new Promise<StationComment>(async (resolve, reject) => {
     try {
       const response = await axios.post<any, AxiosResponse<StationComment>>(
         API_URLS.stations.commentCreate(),
-        { stationId, text }
+        {
+          stationId,
+          text,
+          ...(parentId != null ? { parentId } : {}),
+        }
       );
       resolve(response.data);
     } catch (error: any) {
