@@ -1,7 +1,7 @@
-import { BASE_URL } from "./const";
-
 export const api = (l?: string) => {
-  return l ? `${BASE_URL}/api/${l}` : BASE_URL;
+  const base = "https://nonconterminously-unreactionary-lai.ngrok-free.dev";
+
+  return l ? `${base}/api/${l}` : base;
 };
 
 function objectToUrlParams(obj: Record<string, any>): string {
