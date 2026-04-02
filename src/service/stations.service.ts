@@ -25,6 +25,14 @@ export async function fetchNearbyStations(
 }
 
 export interface IStationRes extends Pagination<IStation> {}
+
+export interface CommentPagination {
+  data: StationComment[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
 export function loadStations(
   searchOptions?: Partial<SearchParams> & {
     division?: string;
@@ -120,11 +128,21 @@ export function unfollowStation(stationId: number) {
   });
 }
 
-export function loadCommentsByStation(stationId: number) {
-  return new Promise<StationComment[]>(async (resolve, reject) => {
+export function loadCommentsByStation(
+  stationId: number,
+  params?: {
+    filter?: "all" | "my" | "newest" | "oldest" | "mostReply";
+    page?: number;
+    limit?: number;
+  }
+) {
+  return new Promise<CommentPagination>(async (resolve, reject) => {
     try {
-      const response = await axios.get<any, AxiosResponse<StationComment[]>>(
-        API_URLS.stations.comments(stationId)
+      const response = await axios.get<any, AxiosResponse<CommentPagination>>(
+        API_URLS.stations.comments(stationId),
+        {
+          params: params || {},
+        }
       );
       resolve(response.data);
     } catch (error: any) {

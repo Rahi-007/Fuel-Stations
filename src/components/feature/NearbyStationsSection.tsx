@@ -139,21 +139,23 @@ export default function NearbyStationsSection() {
               </p>
 
               <p className="mt-2">
-                <span
-                  className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-                    s.status === FuelStatus.AVAILABLE
-                      ? "bg-green-100 text-green-700"
+                {s.status && (
+                  <span
+                    className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+                      s.status === FuelStatus.AVAILABLE
+                        ? "bg-green-100 text-green-700"
+                        : s.status === FuelStatus.LIMITED
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {s.status === FuelStatus.AVAILABLE
+                      ? "Available"
                       : s.status === FuelStatus.LIMITED
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {s.status === FuelStatus.AVAILABLE
-                    ? "Available"
-                    : s.status === FuelStatus.LIMITED
-                      ? "Limited"
-                      : "Out of stock"}
-                </span>
+                        ? "Limited"
+                        : "Out of stock"}
+                  </span>
+                )}
               </p>
             </Link>
           ))}

@@ -25,6 +25,13 @@ import { toast } from "sonner";
 import { Heart, UserCheck, UserPlus } from "lucide-react";
 import Image from "next/image";
 import { FuelStatus, type StationComment } from "@/interface/station.interface";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function CommentAvatar({ name, avatar }: { name: string; avatar?: string }) {
   const initials =
@@ -282,12 +289,22 @@ export default function StationDetailsPage() {
   const [commentText, setCommentText] = useState("");
   const [replyingToId, setReplyingToId] = useState<number | null>(null);
   const [replyText, setReplyText] = useState("");
+  const [commentFilter, setCommentFilter] = useState<
+    "all" | "my" | "newest" | "oldest" | "mostReply"
+  >("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const COMMENTS_PER_PAGE = 30;
 
+  // Fetch comments with filter and pagination
   useEffect(() => {
     if (!Number.isFinite(stationId) || stationId < 1) return;
-    getStation.action(stationId);
-    getComments.action(stationId);
-  }, []);
+    getStation.action(stationId); // Load station details
+    getComments.action(stationId, {
+      filter: commentFilter,
+      page: currentPage,
+      limit: COMMENTS_PER_PAGE,
+    });
+  }, [stationId, commentFilter, currentPage]); // Add commentFilter and currentPage to dependencies
 
   useEffect(() => {
     if (!mounted) return;
@@ -318,7 +335,11 @@ export default function StationDetailsPage() {
   };
 
   const refreshComments = async () => {
-    await getComments.action(stationId);
+    await getComments.action(stationId, {
+      filter: commentFilter,
+      page: currentPage,
+      limit: COMMENTS_PER_PAGE,
+    });
   };
 
   async function handleLike() {
@@ -402,7 +423,7 @@ export default function StationDetailsPage() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="mx-auto max-w-6xl px-4 pb-10 pt-6">
+      <div className="mx-auto max-w-6xl px-4 pb-10 pt-6 sm:pb-30">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h1 className="font-salsa text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -416,13 +437,13 @@ export default function StationDetailsPage() {
                 getStation.data?.division?.name,
               ].filter(Boolean).length
                 ? `Location: ${[
-                    getStation.data?.village,
-                    getStation.data?.subDistrict?.name,
-                    getStation.data?.district?.name,
-                    getStation.data?.division?.name,
-                  ]
-                    .filter(Boolean)
-                    .join(", ")}`
+                  getStation.data?.village,
+                  getStation.data?.subDistrict?.name,
+                  getStation.data?.district?.name,
+                  getStation.data?.division?.name,
+                ]
+                  .filter(Boolean)
+                  .join(", ")}`
                 : "Location not Available"}
             </p>
           </div>
@@ -475,13 +496,12 @@ export default function StationDetailsPage() {
                 />
                 <p className="absolute top-0 right-1">
                   <span
-                    className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-                      getStation.data?.status === FuelStatus.AVAILABLE
-                        ? "bg-green-100 text-green-700"
-                        : getStation.data?.status === FuelStatus.LIMITED
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
-                    }`}
+                    className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${getStation.data?.status === FuelStatus.AVAILABLE
+                      ? "bg-green-100 text-green-700"
+                      : getStation.data?.status === FuelStatus.LIMITED
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                      }`}
                   >
                     {getStation.data?.status === FuelStatus.AVAILABLE
                       ? "Available"
@@ -500,7 +520,7 @@ export default function StationDetailsPage() {
                       Details{" "}
                       <span className="text-base text-gray-400">
                         ( Following by {getStation.data?.followersCount ?? 0}{" "}
-                        peoples )
+                        people )
                       </span>
                     </p>
                     {/* {getStation.data?.followersCount ?? 0} */}
@@ -523,9 +543,9 @@ export default function StationDetailsPage() {
                 <div className="grid grid-cols-1 sm:grid grid-cols-2text-sm text-muted-foreground">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
                     {getStation.data?.fuelTypes &&
-                    Object.entries(getStation.data.fuelTypes).some(
-                      ([, v]) => v === true
-                    ) ? (
+                      Object.entries(getStation.data.fuelTypes).some(
+                        ([, v]) => v === true
+                      ) ? (
                       Object.entries(getStation.data.fuelTypes)
                         .filter(([, v]) => v === true)
                         .map(([key]) => (
@@ -548,9 +568,9 @@ export default function StationDetailsPage() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {getStation.data?.prices &&
-                      Object.entries(getStation.data.prices).some(
-                        ([, v]) => v > 0
-                      ) ? (
+                        Object.entries(getStation.data.prices).some(
+                          ([, v]) => v > 0
+                        ) ? (
                         Object.entries(getStation.data.prices)
                           .filter(([, v]) => v > 0)
                           .map(([key, value]) => (
@@ -635,12 +655,11 @@ export default function StationDetailsPage() {
                       {getStation.data?.queueStatus ? (
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium border
-                            ${
-                              getStation.data.queueStatus === "low"
-                                ? "bg-green-100 text-green-700 border-green-300"
-                                : getStation.data.queueStatus === "medium"
-                                  ? "bg-yellow-100 text-yellow-700 border-yellow-300"
-                                  : "bg-red-100 text-red-700 border-red-300"
+                            ${getStation.data.queueStatus === "low"
+                              ? "bg-green-100 text-green-700 border-green-300"
+                              : getStation.data.queueStatus === "medium"
+                                ? "bg-yellow-100 text-yellow-700 border-yellow-300"
+                                : "bg-red-100 text-red-700 border-red-300"
                             }`}
                         >
                           {getStation.data.queueStatus}
@@ -657,7 +676,6 @@ export default function StationDetailsPage() {
 
           <div className="bg-background flex flex-col">
             <div className="border rounded-xl p-5">
-              <p className="text-base font-semibold">Comments</p>
               <div className="mt-4 space-y-3 flex-1">
                 <Textarea
                   placeholder="Write a comment..."
@@ -680,14 +698,34 @@ export default function StationDetailsPage() {
         </div>
 
         <div className="mt-8 space-y-4">
-          <p className="text-base font-semibold">
-            Discussion{" "}
-            <span className="text-sm font-normal text-muted-foreground">
-              ({(getComments.data ?? []).length} comments)
-            </span>
-          </p>
+          <div className="flex flex-row justify-between">
+            <p className="text-base font-semibold">
+              Discussion{" "}
+              <span className="text-sm font-normal text-muted-foreground">
+                ({(getComments.data?.data ?? []).length} comments)
+              </span>
+            </p>
+            <Select
+              value={commentFilter}
+              onValueChange={(val) => {
+                setCommentFilter(val as any);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filter comments" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Comments</SelectItem>
+                <SelectItem value="my">My Comments</SelectItem>
+                <SelectItem value="newest">Newest</SelectItem>
+                <SelectItem value="oldest">Oldest</SelectItem>
+                <SelectItem value="mostReply">Most Reply</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           {(() => {
-            const comments = getComments.data ?? [];
+            const comments = getComments.data?.data ?? [];
             if (comments.length === 0) {
               return (
                 <p className="text-sm text-muted-foreground">
@@ -696,20 +734,16 @@ export default function StationDetailsPage() {
               );
             }
 
-            // If backend returns only a recent slice, some replies may not include
-            // their parent. Treat them as top-level so they don't disappear.
+            // Backend already filters and sorts, just display the paginated data
+            // Separate parent comments from replies for threaded display
             const commentIdSet = new Set(comments.map((c) => c.id));
             const topLevelComments = comments.filter(
               (c) => !c.parentId || !commentIdSet.has(c.parentId)
             );
 
-            const sortedTopLevel = [...topLevelComments].sort(
-              (a, b) => createdAtToMs(b.createdAt) - createdAtToMs(a.createdAt)
-            );
-
             return (
               <div className="space-y-6">
-                {sortedTopLevel.map((parent) => (
+                {topLevelComments.map((parent) => (
                   <CommentThread
                     key={parent.id}
                     comment={parent}
@@ -734,7 +768,53 @@ export default function StationDetailsPage() {
               </div>
             );
           })()}
+
+          {/* Pagination Controls */}
+          {getComments.data && getComments.data.total > COMMENTS_PER_PAGE && (
+            <div className="mt-6 flex items-center justify-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                Page {currentPage} of{" "}
+                {Math.ceil(getComments.data.total / COMMENTS_PER_PAGE)}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  setCurrentPage((p) =>
+                    Math.min(
+                      Math.ceil(
+                        (getComments.data?.total || 1) / COMMENTS_PER_PAGE
+                      ),
+                      p + 1
+                    )
+                  )
+                }
+                disabled={
+                  currentPage >=
+                  Math.ceil((getComments.data?.total || 1) / COMMENTS_PER_PAGE)
+                }
+              >
+                Next
+              </Button>
+            </div>
+          )}
         </div>
+
+        {/* Filter Info */}
+        {getComments.data && commentFilter !== "all" && (
+          <div className="mt-4 text-sm text-muted-foreground">
+            Showing {getComments.data.data.length} of {getComments.data.total}{" "}
+            comments (Filtered by: {commentFilter})
+          </div>
+        )}
         {/* update form */}
         {isAdmin && showUpdateForm && getStation.data ? (
           <div className="mt-8 rounded-xl border p-4">
