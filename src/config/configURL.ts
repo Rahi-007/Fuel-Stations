@@ -1,5 +1,5 @@
 export const api = (l?: string) => {
-  const base = "https://nonconterminously-unreactionary-lai.ngrok-free.dev";
+  const base = "https://fuel-stations-backend.onrender.com";
 
   return l ? `${base}/api/${l}` : base;
 };
