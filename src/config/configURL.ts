@@ -1,6 +1,6 @@
 export const api = (l?: string) => {
   const base = "https://fuel-stations-backend.onrender.com";
-
+  
   return l ? `${base}/api/${l}` : base;
 };
 
@@ -12,6 +12,10 @@ export const API_URLS = {
   auth: {
     login: () => api("auth/login"),
     register: () => api("auth/register"),
+  },
+  upload: {
+    single: () => api("upload/single"),
+    multiple: () => api("upload/multiple"),
   },
   stations: {
     all: () => api("stations"),

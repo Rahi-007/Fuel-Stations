@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import GInput from "@/components/common/GInput";
 import GSelect from "@/components/common/GSelect";
+import GFileUpload from "@/components/common/GFileUpload";
 import { Textarea } from "@/components/ui/textarea";
 import {
   FormField,
@@ -168,11 +169,14 @@ const StationForm = (props: IProps) => {
 
         <GInput.Form control={form.control} name="village" label="Village" />
 
-        <GInput.Form
+        <GFileUpload.Form
           control={form.control}
           name="avatar"
-          label="Avatar URL"
-          placeholder="https://..."
+          label="Station Avatar"
+          accept="image/*"
+          maxSize={5 * 1024 * 1024} // 5MB
+          folder="stations/avatars"
+          showPreview={true}
         />
 
         <div className="grid gap-3 sm:grid-cols-2">

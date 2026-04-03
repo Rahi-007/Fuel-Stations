@@ -1,11 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <!-- FuelMap favicon (location pin + fuel dot) -->
-  <g transform="translate(12 12) scale(1.25) translate(-12 -12)">
-    <path
-      d="M12 6.5c-1.7 0-3.08 1.38-3.08 3.08 0 2.35 3.08 5.88 3.08 5.88s3.08-3.53 3.08-5.88c0-1.7-1.38-3.08-3.08-3.08Z"
-      fill="#06b6d4"
-    />
-    <circle cx="12" cy="11" r="2.4" fill="#cffafe" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Beautiful FuelMap Favicon - Location Pin with Fuel Pump -->
+  <defs>
+    <linearGradient id="pinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <linearGradient id="fuelGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="28" fill="url(#pinGradient)" opacity="0.9" />
+  
+  <!-- Location pin shape -->
+  <path d="M32 12c-8.8 0-16 7.2-16 16 0 12 16 24 16 24s16-12 16-24c0-8.8-7.2-16-16-16z" 
+        fill="white" fill-opacity="0.9" stroke="url(#pinGradient)" stroke-width="2" />
+  
+  <!-- Fuel pump nozzle -->
+  <g transform="translate(32, 28) scale(0.8)">
+    <!-- Pump handle -->
+    <rect x="-4" y="-10" width="8" height="16" rx="2" fill="url(#fuelGradient)" />
+    
+    <!-- Nozzle tip -->
+    <path d="M-6 6 L6 6 L8 10 L-8 10 Z" fill="url(#fuelGradient)" />
+    
+    <!-- Fuel droplet -->
+    <circle cx="0" cy="-6" r="3" fill="#fbbf24" />
+    
+    <!-- Connection hose -->
+    <path d="M0 10 Q0 20 -10 25" stroke="#3b82f6" stroke-width="2" fill="none" stroke-linecap="round" />
   </g>
 </svg>
-
