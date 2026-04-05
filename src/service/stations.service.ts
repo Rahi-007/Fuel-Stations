@@ -199,3 +199,72 @@ export function createStationComment(
     }
   });
 }
+
+export function createStationUpdateRequest(
+  stationId: number,
+  changes: Partial<UpdateStation>
+) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await axios.post<any, AxiosResponse<any>>(
+        API_URLS.stations.updateRequest(),
+        { stationId, changes }
+      );
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function getStationUpdateRequests(params?: {
+  status?: "pending" | "approved" | "rejected";
+  page?: number;
+  limit?: number;
+}) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await axios.get<any, AxiosResponse<any>>(
+        API_URLS.stations.updateRequests(),
+        { params }
+      );
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function approveStationUpdateRequest(
+  requestId: number,
+  adminNote?: string
+) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await axios.put<any, AxiosResponse<any>>(
+        API_URLS.stations.updateRequestApprove(requestId),
+        { status: "approved", adminNote }
+      );
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}
+
+export function rejectStationUpdateRequest(
+  requestId: number,
+  adminNote?: string
+) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const response = await axios.put<any, AxiosResponse<any>>(
+        API_URLS.stations.updateRequestReject(requestId),
+        { status: "rejected", adminNote }
+      );
+      resolve(response.data);
+    } catch (error: any) {
+      reject(error.response?.data?.message || "Something went wrong");
+    }
+  });
+}

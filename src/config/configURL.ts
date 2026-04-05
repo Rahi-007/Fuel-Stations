@@ -1,6 +1,6 @@
 export const api = (l?: string) => {
-  const base = "https://fuel-stations-backend.onrender.com";
-  
+  const base = "http://localhost:8080";
+
   return l ? `${base}/api/${l}` : base;
 };
 
@@ -32,6 +32,10 @@ export const API_URLS = {
       api(`stations/${stationId}/follow-status`),
     comments: (stationId: number) => api(`stations/${stationId}/comments`),
     commentCreate: () => api("stations/comment"),
+    updateRequest: () => api("stations/update-requests"),
+    updateRequests: () => api("stations/update-requests"),
+    updateRequestApprove: (id: number) => api(`stations/update-requests/${id}/approve`),
+    updateRequestReject: (id: number) => api(`stations/update-requests/${id}/reject`),
   },
   user: {
     all: (s?: Record<string, any>) =>

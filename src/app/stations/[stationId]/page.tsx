@@ -200,7 +200,7 @@ function CommentThread({
                 placeholder="Write a reply..."
                 value={replyText}
                 onChange={(e) => onReplyTextChange(e.target.value)}
-                className="min-h-[80px] resize-none text-sm"
+                className="min-h-20 resize-none text-sm"
               />
               <div className="flex justify-end gap-2">
                 <Button
@@ -473,10 +473,10 @@ export default function StationDetailsPage() {
               </Button>
             </div>
 
-            {/* Admin */}
-            {isAdmin ? (
+            {/* Update / Request Update */}
+            {user ? (
               <Button onClick={() => setShowUpdateForm((x) => !x)}>
-                {showUpdateForm ? "Close update" : "Update"}
+                {showUpdateForm ? "Close" : isAdmin ? "Update" : "Request Update"}
               </Button>
             ) : null}
           </div>
@@ -487,7 +487,7 @@ export default function StationDetailsPage() {
           <div className="lg:col-span-2 space-y-4">
             <div className="rounded-xl border overflow-hidden bg-background">
               {/* Image */}
-              <div className="relative w-full h-[400px]">
+              <div className="relative w-full h-100">
                 <Image
                   src={getStation.data?.avatar || "/gasStationObject.png"}
                   alt="Station Image"
@@ -816,14 +816,21 @@ export default function StationDetailsPage() {
           </div>
         )}
         {/* update form */}
-        {isAdmin && showUpdateForm && getStation.data ? (
+        {user && showUpdateForm && getStation.data ? (
           <div className="mt-8 rounded-xl border p-4">
-            <p className="text-sm font-medium">Update station</p>
+            <p className="text-sm font-medium">
+              {isAdmin ? "Update station" : "Request station update"}
+            </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Update station fields and save.
+              {isAdmin
+                ? "Update station fields and save."
+                : "Submit changes for admin approval."}
             </p>
             <div className="mt-4">
-              <StationForm defaultValues={getStation.data} />
+              <StationForm
+                defaultValues={getStation.data}
+                mode={isAdmin ? "direct" : "request"}
+              />
             </div>
           </div>
         ) : null}

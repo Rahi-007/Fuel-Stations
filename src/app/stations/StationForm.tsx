@@ -11,7 +11,7 @@ import {
   IStation,
   QueueStatus,
 } from "@/interface/station.interface";
-import { editStation } from "@/service/stations.service";
+import { editStation, createStationUpdateRequest } from "@/service/stations.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -68,6 +68,8 @@ export const updateStationSchema = z.object({
 
 interface IProps {
   defaultValues?: IStation;
+  mode?: 'direct' | 'request';
+  onSubmit?: (values: StationFormValues) => Promise<void>;
 }
 
 export type StationFormValues = z.infer<typeof updateStationSchema>;
@@ -75,6 +77,7 @@ export type StationFormValues = z.infer<typeof updateStationSchema>;
 const StationForm = (props: IProps) => {
   const router = useRouter();
   const fnEditStation = useAsyncAction(editStation);
+  const fnCreateUpdateRequest = useAsyncAction(createStationUpdateRequest);
 
   const form = useForm<StationFormValues>({
     resolver: zodResolver(updateStationSchema) as any,
@@ -116,9 +119,19 @@ const StationForm = (props: IProps) => {
 
   async function onSubmit(values: StationFormValues) {
     try {
-      if (props.defaultValues) {
-        await fnEditStation.action(props.defaultValues.id, values);
-
+      if (props.onSubmit) {
+        await props.onSubmit(values);
+        return;
+      }
+      if (!props.defaultValues) return;
+      const stationId = props.defaultValues.id;
+      if (props.mode === 'request') {
+        await fnCreateUpdateRequest.action(stationId, values);
+        toast.success("Update request submitted for admin approval");
+        router.push(`/stations/${stationId}`);
+      } else {
+        // direct update (admin)
+        await fnEditStation.action(stationId, values);
         toast.success("Station updated successfully");
         router.push(`/stations`);
       }
@@ -294,7 +307,9 @@ const StationForm = (props: IProps) => {
 
         <div className="flex flex-wrap gap-2 pt-2">
           <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "Updating..." : "Update Station"}
+            {form.formState.isSubmitting
+              ? props.mode === 'request' ? "Submitting..." : "Updating..."
+              : props.mode === 'request' ? "Request Update" : "Update Station"}
           </Button>
           <Button type="button" variant="outline" onClick={() => form.reset()}>
             Reset

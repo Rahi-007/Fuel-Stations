@@ -4,7 +4,7 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import { AdminGuard } from "@/components/auth/AdminGuard";
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
+import { MapPin, ClipboardList } from "lucide-react";
 
 export default function DashboardPage() {
   return (
@@ -38,6 +38,21 @@ export default function DashboardPage() {
                   <Link href="/dashboard/location/sub-district">
                     Sub-districts
                   </Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-border bg-card/40 p-4">
+              <div className="flex items-center gap-2 text-sm font-medium">
+                <ClipboardList className="h-4 w-4 text-primary" />
+                Update Requests
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Review and approve station update requests from users.
+              </p>
+              <div className="mt-4 flex flex-col gap-2">
+                <Button variant="secondary" size="sm" asChild>
+                  <Link href="/dashboard/update-requests">View Requests</Link>
                 </Button>
               </div>
             </div>
